@@ -31,7 +31,9 @@ fun WelcomeScreen() {
         Spacer(modifier = Modifier.height(100.dp))
         Spacer(modifier = Modifier.height(80.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                      // change_test
+            },
             modifier = Modifier
                 .width(200.dp)
                 .height(45.dp),
