@@ -12,6 +12,9 @@ import com.example.calorificator.ui.theme.BGPurple
 import com.example.calorificator.ui.theme.CalorificatorTheme
 
 class MainActivity : ComponentActivity() {
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -21,11 +24,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = BGPurple
                 ) {
-                    WelcomeScreen()
+                    HomeScreen()
                 }
             }
         }
     }
+
+
 }
 
 @Composable
@@ -40,3 +45,4 @@ fun CalorificatorpPreview(){
         WelcomeScreen()
     }
 }
+
