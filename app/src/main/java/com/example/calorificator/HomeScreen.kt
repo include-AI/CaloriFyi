@@ -23,11 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.example.calorificator.ui.theme.BGPurple
 import kotlinx.coroutines.launch
 
-
-
-
-
-
 @Composable
 fun HomeScreen(){
     val scaffoldState = rememberScaffoldState()
