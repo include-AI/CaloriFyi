@@ -3,5 +3,6 @@
 
     <style name="Theme.Calorificator" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/usepurple</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 </resources>
