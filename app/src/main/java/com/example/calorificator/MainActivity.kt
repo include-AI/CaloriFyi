@@ -3,14 +3,10 @@ package com.example.calorificator
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.calorificator.Navigation.SetupNavGraph
-import com.example.calorificator.ui.theme.BGPurple
 import com.example.calorificator.ui.theme.CalorificatorTheme
 
 class MainActivity : ComponentActivity() {
@@ -39,14 +35,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Calorificator(){
-    WelcomeScreen()
 }
 
 @Preview
 @Composable
 fun CalorificatorpPreview(){
     CalorificatorTheme {
-        WelcomeScreen()
     }
 }
 

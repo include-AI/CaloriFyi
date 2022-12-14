@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.example.calorificator.Navigation.Screen
 import com.example.calorificator.ui.theme.UsePurple
 
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(navController: NavHostController) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -32,7 +34,7 @@ fun WelcomeScreen() {
         Spacer(modifier = Modifier.height(80.dp))
         Button(
             onClick = {
-                      // change_test
+                navController.navigate(Screen.Welcome.route)
             },
             modifier = Modifier
                 .width(200.dp)
