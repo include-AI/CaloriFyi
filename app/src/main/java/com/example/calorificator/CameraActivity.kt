@@ -102,6 +102,7 @@ class CameraActivity : ComponentActivity() {
 
         outputDirectory = getOutputDirectory()
         cameraExecutor = Executors.newSingleThreadExecutor()
+
     }
 
     private fun requestCameraPermission(){
@@ -147,6 +148,10 @@ class CameraActivity : ComponentActivity() {
     }
 }
 
+
+
+
+
 private fun takePhoto(
     filenameFormat: String,
     imageCapture: ImageCapture,
@@ -155,7 +160,6 @@ private fun takePhoto(
     onImageCaptured: (Uri) -> Unit,
     onError: (ImageCaptureException) -> Unit
 ) {
-
     val photoFile = File.createTempFile(
         SimpleDateFormat(filenameFormat, Locale.US).format(System.currentTimeMillis()),
         ".jpg",
@@ -175,7 +179,11 @@ private fun takePhoto(
             onImageCaptured(savedUri)
         }
     })
+
+
+
 }
+
 
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutine { continuation ->
     ProcessCameraProvider.getInstance(this).also { cameraProvider ->
@@ -192,6 +200,8 @@ fun CameraView(
     executor: Executor,
     onImageCaptured: (Uri) -> Unit,
     onError: (ImageCaptureException) -> Unit) {
+
+
 
     // 1
     val lensFacingFront = CameraSelector.LENS_FACING_FRONT

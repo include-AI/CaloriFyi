@@ -5,4 +5,13 @@
         <item name="android:statusBarColor">@color/usepurple</item>
         <item name="android:windowBackground">@color/white</item>
     </style>
+
+    <style name="Theme.Calorificator.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Calorificator.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Calorificator.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
