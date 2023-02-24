@@ -163,12 +163,23 @@ fun HomeScreen(){
 
 @Composable
 fun SideDrawer(){
+    val cam2Context = LocalContext.current
     Column(
         modifier = Modifier
             .background(BGPurple)
             .fillMaxSize()
     ) {
 
+        Card(
+            modifier = Modifier
+                .padding(10.dp)) {
+            Button(
+                onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) },
+                modifier = Modifier.fillMaxWidth()
+            ){
+                Text(text = "Calories in Gallery")
+            }
+        }
     }
 }
 
