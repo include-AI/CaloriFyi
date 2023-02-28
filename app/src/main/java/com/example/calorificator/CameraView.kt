@@ -74,7 +74,7 @@ fun SimpleCameraPreview(
             factory = { ctx ->
                 val previewView = PreviewView(ctx)
                 cameraProviderFuture.addListener({
-                    val imageAnalyis = ImageAnalysis.Builder()
+                    val imageAnalysis = ImageAnalysis.Builder()
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build()
                         .apply {
