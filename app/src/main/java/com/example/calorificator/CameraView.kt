@@ -1,208 +1,221 @@
 package com.example.calorificator
 
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
+import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
-import androidx.camera.core.Preview
+import android.widget.Toast
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.sharp.FlipCameraAndroid
-import androidx.compose.material.icons.sharp.Lens
-import androidx.compose.material.icons.sharp.PhotoLibrary
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import com.example.calorificator.ui.theme.Purple500
 import java.io.File
-import java.util.concurrent.Executor
-
-
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 @Composable
-fun CameraView(
-    outputDirectory: File,
-    executor: Executor,
-    onImageCaptured: (Uri) -> Unit,
-    onError: (ImageCaptureException) -> Unit) {
-
-
-    val cam2Context = LocalContext.current
-
-
-
-    // 1
-    val lensFacingFront = CameraSelector.LENS_FACING_FRONT
-    val lensFacingBack = CameraSelector.LENS_FACING_BACK
+fun CameraOpen(dir: File){
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val preview = Preview.Builder().build()
-    val previewView = remember { PreviewView(context) }
-    val imageCapture: ImageCapture = remember { ImageCapture.Builder().build() }
-    val cameraSelector = CameraSelector.Builder()
-        .build()
-
-    // 2
-    LaunchedEffect(lensFacingBack) {
-        val cameraProvider = context.getCameraProvider()
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(
-            lifecycleOwner,
-            cameraSelector,
-            preview,
-            imageCapture
-        )
-
-        preview.setSurfaceProvider(previewView.surfaceProvider)
-    }
-
-    // 3
-    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
-        AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
-
-
-        Row(
-        ){
-            IconButton(
-                modifier = Modifier.padding(bottom = 20.dp),
-                onClick = {
-
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Sharp.FlipCameraAndroid,
-                        contentDescription = "Flip Camera",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .padding(1.dp)
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                modifier = Modifier.padding(bottom = 20.dp),
-                onClick = {
-                    Log.i("camera", "ON CLICK")
-                    takePhoto(
-                        filenameFormat = "yyyy-MM-dd-HH-mm-ss-SSS",
-                        imageCapture = imageCapture,
-                        outputDirectory = outputDirectory,
-                        executor = executor,
-                        onImageCaptured = onImageCaptured,
-                        onError = onError
-                    )
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Sharp.Lens,
-                        contentDescription = "Take Picture",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .padding(1.dp)
-                            .border(1.dp, Color.White, CircleShape)
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            var imageUri by remember {
-                mutableStateOf<Uri?>(null)
-            }
-            val context = LocalContext.current
-            val bitmap =  remember {
-                mutableStateOf<Bitmap?>(null)
-            }
-
-            val launcher = rememberLauncherForActivityResult(contract =
-            ActivityResultContracts.GetContent()) { uri: Uri? ->
-                imageUri = uri
-            }
-            IconButton(
-                modifier = Modifier.padding(bottom = 20.dp),
-                onClick = {
-                    cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java))
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Sharp.PhotoLibrary,
-                        contentDescription = "Gallery",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .padding(1.dp)
-                    )
-                }
-            )
-        }
-
-    }
+    SimpleCameraPreview(
+        modifier = Modifier.fillMaxSize(),
+        context = context,
+        lifecycleOwner = lifecycleOwner,
+        outputDirectory = dir,
+        onMediaCaptured = { url -> }
+    )
 }
 
 @Composable
-fun RequestContentPermission() {
-    var imageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
-    val context = LocalContext.current
-    val bitmap =  remember {
-        mutableStateOf<Bitmap?>(null)
-    }
+fun SimpleCameraPreview(
+    modifier: Modifier = Modifier,
+    context: Context,
+    lifecycleOwner: LifecycleOwner,
+    outputDirectory: File,
+    onMediaCaptured: (Uri?) -> Unit
+    ){
+    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
+    var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
+    var preview by remember { mutableStateOf<Preview?>(null) }
+    val camera: Camera? = null
+    var lensFacing by remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
+    var flashEnabled by remember { mutableStateOf(false) }
+    var flashRes by remember { mutableStateOf(R.drawable.flashlight_on_48px)}
+    val executor = ContextCompat.getMainExecutor(context)
+    var cameraSelector: CameraSelector?
+    val cameraProvider = cameraProviderFuture.get()
 
-    val launcher = rememberLauncherForActivityResult(contract =
-    ActivityResultContracts.GetContent()) { uri: Uri? ->
-        imageUri = uri
-    }
-    Column() {
-        Button(onClick = {
-            launcher.launch("image/*")
-        }) {
-            Text(text = "Pick image")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        imageUri?.let {
-            if (Build.VERSION.SDK_INT < 28) {
-                bitmap.value = MediaStore.Images
-                    .Media.getBitmap(context.contentResolver,it)
-
-            } else {
-                val source = ImageDecoder
-                    .createSource(context.contentResolver,it)
-                bitmap.value = ImageDecoder.decodeBitmap(source)
+    Box {
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = { ctx ->
+                val previewView = PreviewView(ctx)
+                cameraProviderFuture.addListener({
+                    val imageAnalyis = ImageAnalysis.Builder()
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .build()
+                        .apply {
+                            setAnalyzer(executor, FaceAnalyzer())
+                        }
+                    imageCapture = ImageCapture.Builder()
+                        .setTargetRotation(previewView.display.rotation)
+                        .build()
+                    val cameraSelector = CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+                    cameraProvider.unbindAll()
+                    cameraProvider.bindToLifecycle(
+                        lifecycleOwner,
+                        cameraSelector,
+                        imageCapture,
+                        preview
+                    )
+                }, executor)
+                preview = Preview.Builder().build().also {
+                    it.setSurfaceProvider(previewView.surfaceProvider)
+                }
+                previewView
             }
-
-            bitmap.value?.let {  btm ->
-                Image(bitmap = btm.asImageBitmap(),
-                    contentDescription =null,
-                    modifier = Modifier.size(400.dp))
+        )
+        
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+                .align(Alignment.TopStart)
+        ) {
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "Back Clicked", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack, 
+                    contentDescription = "back arrow",
+                    tint = MaterialTheme.colors.surface
+                )
             }
         }
+        
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp)
+                .clip(RoundedCornerShape(15.dp))
+                .background(Purple500, RoundedCornerShape(15.dp))
+                .padding(8.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            IconButton(
+                onClick = {
+                    camera?.let {
+                        if (it.cameraInfo.hasFlashUnit()) {
+                            flashEnabled = !flashEnabled
+                            flashRes = if (flashEnabled) R.drawable.flashlight_off_48px else R.drawable.flashlight_on_48px
+                            it.cameraControl.enableTorch(flashEnabled)
+                        }
+                    }
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = flashRes), 
+                    contentDescription = null,
+                    modifier = Modifier.size(35.dp),
+                    tint = MaterialTheme.colors.surface
+                )
+            }
+            
+            Button(
+                onClick = { 
+                    val imgCapture = imageCapture ?: return@Button
+                    val photoFile = File(
+                        outputDirectory,
+                        SimpleDateFormat("yyyyMMDD-HHmmss", Locale.US)
+                            .format(System.currentTimeMillis()) + ".jpg"
+                    )
+                    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+                    imgCapture.takePicture(
+                        outputOptions,
+                        executor,
+                        object : ImageCapture.OnImageSavedCallback {
+                            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                                val savedUri = Uri.fromFile(photoFile)
+                                onMediaCaptured(savedUri)
+                            }
 
+                            override fun onError(exception: ImageCaptureException) {
+                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    )
+                },
+                modifier = Modifier
+                    .size(70.dp)
+                    .background(Purple500, CircleShape)
+                    .shadow(4.dp, CircleShape)
+                    .clip(CircleShape)
+                    .border(5.dp, Color.LightGray, CircleShape),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Purple500),
+            ) {
+                
+            }
+            
+            IconButton(
+                onClick = {
+                    lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK) CameraSelector.LENS_FACING_FRONT else CameraSelector.LENS_FACING_BACK
+                    cameraSelector = CameraSelector.Builder()
+                        .requireLensFacing(lensFacing)
+                        .build()
+                    cameraProvider.unbindAll()
+                    cameraProvider.bindToLifecycle(
+                        lifecycleOwner,
+                        cameraSelector as CameraSelector,
+                        imageCapture,
+                        preview
+                    )
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Sharp.FlipCameraAndroid,
+                    contentDescription = "Flip",
+                    modifier = Modifier.size(35.dp),
+                    tint = MaterialTheme.colors.surface)
+            }
+        }
+    }
+    
+}
 
+private class FaceAnalyzer(): ImageAnalysis.Analyzer{
+    @SuppressLint("UnsafeOptInUsageError")
+    override fun analyze(image: ImageProxy) {
+        val imagePic = image.image
+        imagePic?.close()
     }
 }
+
