@@ -1,5 +1,6 @@
 package com.example.calorificator
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -48,8 +49,7 @@ fun CameraView(
     onError: (ImageCaptureException) -> Unit) {
 
 
-
-
+    val cam2Context = LocalContext.current
 
 
 
@@ -94,7 +94,7 @@ fun CameraView(
                 content = {
                     Icon(
                         imageVector = Icons.Sharp.FlipCameraAndroid,
-                        contentDescription = "Take Picture",
+                        contentDescription = "Flip Camera",
                         tint = Color.White,
                         modifier = Modifier
                             .size(80.dp)
@@ -144,13 +144,12 @@ fun CameraView(
             IconButton(
                 modifier = Modifier.padding(bottom = 20.dp),
                 onClick = {
-
-
+                    cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java))
                 },
                 content = {
                     Icon(
                         imageVector = Icons.Sharp.PhotoLibrary,
-                        contentDescription = "Take Picture",
+                        contentDescription = "Gallery",
                         tint = Color.White,
                         modifier = Modifier
                             .size(80.dp)
@@ -158,7 +157,6 @@ fun CameraView(
                     )
                 }
             )
-
         }
 
     }

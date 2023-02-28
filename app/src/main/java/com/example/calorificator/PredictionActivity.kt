@@ -26,7 +26,6 @@ import coil.compose.rememberImagePainter
 import com.example.calorificator.ui.theme.CalorificatorTheme
 
 
-
 class PredictionActivity : ComponentActivity() {
 
 //    lateinit var model: FruitModelV1Optimize
@@ -49,15 +48,13 @@ class PredictionActivity : ComponentActivity() {
                 }
             }
 
-            //model = FruitModelV1Optimize.newInstance(this)
+//            model = FruitModelV1Optimize.newInstance(this)
 
 
-            //button.setOnClickListener{
 
         }
     }
-}
-//
+
 //    override fun onDestroy() {
 //        super.onDestroy()
 //        model.close()
@@ -72,6 +69,11 @@ class PredictionActivity : ComponentActivity() {
 //            getPredictions()
 //        }
 //    }
+}
+//
+
+//
+
 //
 //    fun getPredictions(){
 //
@@ -126,13 +128,30 @@ fun PredictView() {
                     modifier = Modifier
                         .padding(16.dp, 8.dp)
                         .size(100.dp)
-                        .clickable {  }
+                        .clickable { }
                     )
 
             }
         }
     }
 }
+
+//fun getPredictions(byteBuffer: ByteBuffer){
+//    val model = FruitModelV1Optimize.newInstance()
+//
+//// Creates inputs for reference.
+//    val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
+//    inputFeature0.loadBuffer(byteBuffer)
+//
+//// Runs model inference and gets result.
+//
+//    val outputs = model.process(inputFeature0)
+//    val outputFeature0 = outputs.outputFeature0AsTensorBuffer
+//
+//// Releases model resources if no longer used.
+//    model.close()
+//
+//}
 
 
 //    val intent = Intent()

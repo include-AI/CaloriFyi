@@ -16,10 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.calorificator.ui.theme.BGPurple
 import kotlinx.coroutines.launch
 
@@ -169,17 +172,26 @@ fun SideDrawer(){
             .background(BGPurple)
             .fillMaxSize()
     ) {
+        Column() {
+            Text(
+                text = "Menu",
+                fontFamily = FontFamily.SansSerif,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
 
-        Card(
-            modifier = Modifier
-                .padding(10.dp)) {
-            Button(
-                onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) },
-                modifier = Modifier.fillMaxWidth()
-            ){
-                Text(text = "Calories in Gallery")
+            Card() {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) },
+
+                    ){
+                    Text(text = "Calories in Gallery")
+                }
             }
+
         }
+
     }
 }
 
