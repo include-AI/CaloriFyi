@@ -16,6 +16,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.sharp.FlipCameraAndroid
+import androidx.compose.material.icons.sharp.PhotoLibrary
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import com.example.calorificator.ui.theme.Purple500
+import com.example.calorificator.ui.theme.Purple200
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -103,22 +104,36 @@ fun SimpleCameraPreview(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(15.dp)
                 .align(Alignment.TopStart)
         ) {
             IconButton(
                 onClick = {
                     Toast.makeText(context, "Back Clicked", Toast.LENGTH_SHORT).show()
-                }
+                },
+                modifier = Modifier.weight(1f)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.ArrowBack, 
+                    imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "back arrow",
                     tint = MaterialTheme.colors.surface
                 )
             }
+            Spacer(modifier = Modifier.padding(60.dp))
+            IconButton(
+                onClick = {
+                    Toast.makeText(context, "Gallery Clicked", Toast.LENGTH_SHORT).show()
+                },
+                modifier = Modifier.weight(1f)
+            ) {
+                Icon(
+                    imageVector = Icons.Sharp.PhotoLibrary,
+                    contentDescription = "Photo Library",
+                    tint = MaterialTheme.colors.surface
+                )
+            }
         }
+
         
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -127,7 +142,7 @@ fun SimpleCameraPreview(
                 .fillMaxWidth()
                 .padding(15.dp)
                 .clip(RoundedCornerShape(15.dp))
-                .background(Purple500, RoundedCornerShape(15.dp))
+                .background(Purple200, RoundedCornerShape(15.dp))
                 .padding(8.dp)
                 .align(Alignment.BottomCenter)
         ) {
@@ -155,7 +170,7 @@ fun SimpleCameraPreview(
                     val imgCapture = imageCapture ?: return@Button
                     val photoFile = File(
                         outputDirectory,
-                        SimpleDateFormat("yyyyMMDD-HHmmss", Locale.US)
+                        SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
                             .format(System.currentTimeMillis()) + ".jpg"
                     )
                     val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
@@ -176,11 +191,11 @@ fun SimpleCameraPreview(
                 },
                 modifier = Modifier
                     .size(70.dp)
-                    .background(Purple500, CircleShape)
+                    .background(Purple200, CircleShape)
                     .shadow(4.dp, CircleShape)
                     .clip(CircleShape)
                     .border(5.dp, Color.LightGray, CircleShape),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Purple500),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Purple200),
             ) {
                 
             }
