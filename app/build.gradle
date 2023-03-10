@@ -94,4 +94,12 @@ dependencies {
 
     // Coil
     implementation "io.coil-kt:coil-compose:1.4.0"
+
+    // accompanist
+    implementation "com.google.accompanist:accompanist-pager:0.24.13-rc"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.18.0"
+
+    implementation("androidx.compose.material3:material3:1.0.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.0.1")
+
 }
