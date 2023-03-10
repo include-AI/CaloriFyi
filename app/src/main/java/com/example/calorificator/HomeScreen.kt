@@ -1,6 +1,7 @@
 package com.example.calorificator
 
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -16,10 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.calorificator.ui.theme.BGPurple
 import kotlinx.coroutines.launch
 
@@ -174,7 +178,7 @@ fun SideDrawer(){
             modifier = Modifier
                 .padding(10.dp)) {
             Button(
-                onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) },
+                onClick = { },
                 modifier = Modifier.fillMaxWidth()
             ){
                 Text(text = "Calories in Gallery")
