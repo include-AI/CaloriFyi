@@ -22,7 +22,10 @@ fun SetupNavGraph(navController: NavHostController) {
             SplashScreen(navController = navController)
         }
         composable(route = Screen.Onboarding.route) {
-            OnBoarding()
+            OnBoarding(navController = navController)
+        }
+        composable(route = Screen.Home.route){
+            HomeScreen()
         }
         composable(route = Screen.Welcome.route){
             WelcomeScreen(navController = navController)

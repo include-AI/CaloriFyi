@@ -7,10 +7,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,19 +20,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.calorificator.Navigation.OnboardingItems
+import com.example.calorificator.Navigation.Screen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
-@Preview
 @Composable
-fun OnBoarding() {
+fun OnBoarding(navController: NavHostController) {
     val items = OnboardingItems.OnBoardingItems.getData()
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState()
@@ -47,9 +45,7 @@ fun OnBoarding() {
                 }
             },
             onSkipClick = {
-                if (pageState.currentPage + 1 < items.size) scope.launch {
-                    pageState.scrollToPage(items.size - 1)
-                }
+                navController.navigate(Screen.Home.route)
             }
         )
 
@@ -114,17 +110,17 @@ fun BottomSection(size: Int, index: Int, onButtonClick: () -> Unit = {}) {
              Icon(imageVector = Icons.Outlined.KeyboardArrowRight, contentDescription = "Next")
          }*/
 
-        FloatingActionButton(
-            onClick = { /* do something */ },
-            containerColor = Color.Black,
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
-        ) {
-            Icon(Icons.Outlined.KeyboardArrowRight,
-                tint = Color.White,
-                contentDescription = "Localized description")
-        }
+//        FloatingActionButton(
+//            onClick = { /* do something */ },
+//            containerColor = Color.Black,
+//            modifier = Modifier
+//                .align(Alignment.CenterEnd)
+//                .clip(RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp))
+//        ) {
+//            Icon(Icons.Outlined.KeyboardArrowRight,
+//                tint = Color.White,
+//                contentDescription = "Localized description")
+//        }
     }
 }
 
@@ -133,7 +129,7 @@ fun BoxScope.Indicators(size: Int, index: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.align(Alignment.CenterStart)
+        modifier = Modifier.align(Alignment.Center)
     ) {
         repeat(size) {
             Indicator(isSelected = it == index)
