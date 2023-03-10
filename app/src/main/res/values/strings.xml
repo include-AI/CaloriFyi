@@ -11,4 +11,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_image_view">ImageView</string>
+    <string name="title_activity_image_view2">ImageView2</string>
+    <string name="title_activity_prediction2">PredictionActivity2</string>
+    <string name="title_activity_image_view3">ImageView3</string>
 </resources>

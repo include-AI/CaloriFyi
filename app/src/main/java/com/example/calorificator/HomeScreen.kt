@@ -21,9 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.calorificator.ui.theme.BGPurple
+import com.example.calorificator.ui.theme.CalorificatorTheme
 import kotlinx.coroutines.launch
 
 
@@ -176,10 +178,12 @@ fun SideDrawer(){
             Text(
                 text = "Menu",
                 fontFamily = FontFamily.SansSerif,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(start = 20.dp, top = 30.dp)
             )
-
+            Spacer(modifier = Modifier.height(40.dp))
             Card() {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -196,4 +200,10 @@ fun SideDrawer(){
 }
 
 
-
+@Preview
+@Composable
+fun SideDrawerPreview(){
+    CalorificatorTheme {
+        SideDrawer()
+    }
+}

@@ -2,7 +2,9 @@ package com.example.calorificator
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -14,23 +16,20 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.sharp.FlipCameraAndroid
 import androidx.compose.material.icons.sharp.PhotoLibrary
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import com.example.calorificator.ui.theme.Purple200
+import androidx.navigation.compose.rememberNavController
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,6 +57,7 @@ fun SimpleCameraPreview(
     outputDirectory: File,
     onMediaCaptured: (Uri?) -> Unit
     ){
+    val navController = rememberNavController()
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -102,36 +102,25 @@ fun SimpleCameraPreview(
         )
         
         Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(15.dp)
-                .align(Alignment.TopStart)
+                .align(Alignment.TopCenter)
         ) {
-            IconButton(
-                onClick = {
-                    Toast.makeText(context, "Back Clicked", Toast.LENGTH_SHORT).show()
-                },
-                modifier = Modifier.weight(1f)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "back arrow",
-                    tint = MaterialTheme.colors.surface
-                )
-            }
-            Spacer(modifier = Modifier.padding(60.dp))
-            IconButton(
-                onClick = {
-                    Toast.makeText(context, "Gallery Clicked", Toast.LENGTH_SHORT).show()
-                },
-                modifier = Modifier.weight(1f)
-            ) {
-                Icon(
-                    imageVector = Icons.Sharp.PhotoLibrary,
-                    contentDescription = "Photo Library",
-                    tint = MaterialTheme.colors.surface
-                )
-            }
+//            IconButton(
+//                onClick = {
+//
+//                },
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.ArrowBack,
+//                    contentDescription = "back arrow",
+//                    tint = MaterialTheme.colors.surface
+//                )
+//            }
+
         }
 
         
@@ -142,64 +131,30 @@ fun SimpleCameraPreview(
                 .fillMaxWidth()
                 .padding(15.dp)
                 .clip(RoundedCornerShape(15.dp))
-                .background(Purple200, RoundedCornerShape(15.dp))
+                .background(Color.Transparent, RoundedCornerShape(15.dp))
                 .padding(8.dp)
                 .align(Alignment.BottomCenter)
         ) {
-            IconButton(
-                onClick = {
-                    camera?.let {
-                        if (it.cameraInfo.hasFlashUnit()) {
-                            flashEnabled = !flashEnabled
-                            flashRes = if (flashEnabled) R.drawable.flashlight_off_48px else R.drawable.flashlight_on_48px
-                            it.cameraControl.enableTorch(flashEnabled)
-                        }
-                    }
-                }
-            ) {
-                Icon(
-                    painter = painterResource(id = flashRes), 
-                    contentDescription = null,
-                    modifier = Modifier.size(35.dp),
-                    tint = MaterialTheme.colors.surface
-                )
-            }
-            
-            Button(
-                onClick = { 
-                    val imgCapture = imageCapture ?: return@Button
-                    val photoFile = File(
-                        outputDirectory,
-                        SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
-                            .format(System.currentTimeMillis()) + ".jpg"
-                    )
-                    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-                    imgCapture.takePicture(
-                        outputOptions,
-                        executor,
-                        object : ImageCapture.OnImageSavedCallback {
-                            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                                val savedUri = Uri.fromFile(photoFile)
-                                onMediaCaptured(savedUri)
-                            }
+//            IconButton(
+//                onClick = {
+//                    camera?.let {
+//                        if (it.cameraInfo.hasFlashUnit()) {
+//                            flashEnabled = !flashEnabled
+//                            flashRes = if (flashEnabled) R.drawable.flashlight_off_48px else R.drawable.flashlight_on_48px
+//                            it.cameraControl.enableTorch(flashEnabled)
+//                        }
+//                    }
+//                }
+//            ) {
+//                Icon(
+//                    painter = painterResource(id = flashRes),
+//                    contentDescription = null,
+//                    modifier = Modifier.size(35.dp),
+//                    tint = MaterialTheme.colors.surface
+//                )
+//            }
 
-                            override fun onError(exception: ImageCaptureException) {
-                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    )
-                },
-                modifier = Modifier
-                    .size(70.dp)
-                    .background(Purple200, CircleShape)
-                    .shadow(4.dp, CircleShape)
-                    .clip(CircleShape)
-                    .border(5.dp, Color.LightGray, CircleShape),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Purple200),
-            ) {
-                
-            }
-            
+
             IconButton(
                 onClick = {
                     lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK) CameraSelector.LENS_FACING_FRONT else CameraSelector.LENS_FACING_BACK
@@ -221,6 +176,63 @@ fun SimpleCameraPreview(
                     modifier = Modifier.size(35.dp),
                     tint = MaterialTheme.colors.surface)
             }
+
+            
+            Button(
+                onClick = {
+
+                    val imgCapture = imageCapture ?: return@Button
+                    val photoFile = File(
+                        outputDirectory,
+                        SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US)
+                            .format(System.currentTimeMillis()) + ".jpg"
+                    )
+                    val cameraIntent = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
+                    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+                    imgCapture.takePicture(
+                        outputOptions,
+                        executor,
+                        object : ImageCapture.OnImageSavedCallback {
+                            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                                val savedUri = Uri.fromFile(photoFile)
+                                onMediaCaptured(savedUri)
+
+                            }
+
+                            override fun onError(exception: ImageCaptureException) {
+                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                            }
+                            
+
+
+                        }
+                    )
+                },
+                modifier = Modifier
+                    .size(70.dp)
+                    .clip(CircleShape)
+                    .border(7.dp, Color.LightGray, CircleShape),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+            ) {
+                
+            }
+
+
+            IconButton(
+                onClick = {
+                    context.startActivity(Intent(context, ImageView::class.java))
+                },
+            ){
+                Icon(
+                    modifier = Modifier.size(35.dp),
+                    imageVector = Icons.Sharp.PhotoLibrary,
+                    contentDescription = "Photo Library",
+                    tint = MaterialTheme.colors.surface
+                )
+            }
         }
     }
     
@@ -233,4 +245,9 @@ private class FaceAnalyzer(): ImageAnalysis.Analyzer{
         imagePic?.close()
     }
 }
+
+
+
+
+
 

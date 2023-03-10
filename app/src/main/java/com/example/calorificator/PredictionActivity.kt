@@ -1,28 +1,28 @@
 package com.example.calorificator
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import androidx.compose.ui.unit.sp
+import com.example.calorificator.TensorFlowHelper.imageSize
 import com.example.calorificator.ui.theme.CalorificatorTheme
 
 
@@ -54,6 +54,10 @@ class PredictionActivity : ComponentActivity() {
 
         }
     }
+
+    private val imageSize = 224
+
+
 
 //    override fun onDestroy() {
 //        super.onDestroy()
@@ -99,42 +103,77 @@ class PredictionActivity : ComponentActivity() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PredictView() {
-    
-    var selectImages by remember { mutableStateOf(listOf<Uri>()) }
-    
-    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
-        selectImages = it
+    val cam3ctx = LocalContext.current
+    var photoUri by remember {
+        mutableStateOf<Uri?>(null)
     }
-    
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(
-            modifier = Modifier.padding(10.dp),
-            onClick = { galleryLauncher.launch("image/*") }) {
-            Text(text = "Select Images")
+    var bitmap by remember {
+        mutableStateOf<Bitmap?>(null)
+    }
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = {
+            photoUri = it
         }
-        
-        LazyVerticalGrid(cells = GridCells.Fixed(3)) {
-            items(selectImages) { uri ->
-                Image(
-                    painter = rememberImagePainter(uri),
-                    contentScale = ContentScale.FillWidth,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(16.dp, 8.dp)
-                        .size(100.dp)
-                        .clickable { }
-                    )
+    )
+    
+    Scaffold(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
 
+            photoUri?.let {
+                if (Build.VERSION.SDK_INT < 28)
+                    bitmap = MediaStore.Images.Media.getBitmap(cam3ctx.contentResolver, it)
+                else {
+                    val source = ImageDecoder.createSource(cam3ctx.contentResolver, it)
+                    bitmap = ImageDecoder.decodeBitmap(
+                        source,
+                        ImageDecoder.OnHeaderDecodedListener { decoder, info, source ->
+                            decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                            decoder.isMutableRequired = true
+                        })
+                }
             }
+
+            bitmap?.let {
+                Image(
+                    bitmap = it.asImageBitmap(),
+                    contentDescription = "Image from the gallery",
+                    Modifier.size(400.dp)
+                )
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                val scaledBitmap = Bitmap.createScaledBitmap(it, imageSize, imageSize, false);
+                TensorFlowHelper.classifyImage(scaledBitmap) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        Text(text = "Image is classified as:")
+                        Text(text = it, color = Color.Black, fontSize = 24.sp)
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.padding(25.dp))
+            
+            Button(onClick = { 
+                galleryLauncher.launch("image/*")
+            },
+                modifier = Modifier.wrapContentSize()
+                ) {
+                Text(text = "Select an Image")
+            }
+            
         }
     }
 }
+
 
 //fun getPredictions(byteBuffer: ByteBuffer){
 //    val model = FruitModelV1Optimize.newInstance()
