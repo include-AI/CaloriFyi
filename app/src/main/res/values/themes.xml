@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Calorificator" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.CaloriFyi" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/usepurple</item>
         <item name="android:windowBackground">@color/white</item>
     </style>
 
-    <style name="Theme.Calorificator.NoActionBar">
+    <style name="Theme.CaloriFyi.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Calorificator.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.CaloriFyi.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.Calorificator.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.CaloriFyi.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

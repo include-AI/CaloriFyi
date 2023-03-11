@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.calorificator">
+    package="com.example.calorifyi">
 
     <uses-feature android:name="android.hardware.camera2.any" />
 
@@ -21,45 +21,45 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Calorificator"
+        android:theme="@style/Theme.CaloriFyi"
         tools:targetApi="31">
         <activity
-            android:name=".ImageView3"
+            android:name="com.example.calorifyi.ImageView3"
             android:exported="false"
             android:label="@string/title_activity_image_view3"
-            android:theme="@style/Theme.Calorificator" />
+            android:theme="@style/Theme.CaloriFyi" />
         <activity
-            android:name=".PredictionActivity2"
+            android:name="com.example.calorifyi.PredictionActivity2"
             android:exported="false"
             android:label="@string/title_activity_prediction2"
-            android:theme="@style/Theme.Calorificator" />
+            android:theme="@style/Theme.CaloriFyi" />
         <activity
-            android:name=".ImageView2"
+            android:name="com.example.calorifyi.ImageView2"
             android:exported="false"
             android:label="@string/title_activity_image_view2"
-            android:theme="@style/Theme.Calorificator" />
+            android:theme="@style/Theme.CaloriFyi" />
         <activity
-            android:name=".ImageView"
+            android:name="com.example.calorifyi.ImageView"
             android:exported="false"
             android:label="@string/title_activity_image_view"
-            android:theme="@style/Theme.Calorificator" />
+            android:theme="@style/Theme.CaloriFyi" />
         <activity
-            android:name=".PredictionActivity"
+            android:name="com.example.calorifyi.PredictionActivity"
             android:exported="false" />
         <activity
-            android:name=".CameraActivity"
+            android:name="com.example.calorifyi.CameraActivity"
             android:exported="false"
             android:label="@string/title_activity_camera"
-            android:theme="@style/Theme.Calorificator">
+            android:theme="@style/Theme.CaloriFyi">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.calorifyi.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Calorificator">
+            android:theme="@style/Theme.CaloriFyi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
