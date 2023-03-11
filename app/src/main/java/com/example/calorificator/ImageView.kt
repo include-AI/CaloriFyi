@@ -12,11 +12,10 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -58,7 +57,7 @@ private fun checkPermission(ctx: Context): Boolean {
 
 private fun requestPermissions(ctx: Context, activity: Activity) {
     if (checkPermission(ctx)) {
-        Toast.makeText(ctx, "Permissions granted..", Toast.LENGTH_SHORT).show()
+        Toast.makeText(ctx, "Permissions granted", Toast.LENGTH_SHORT).show()
         getImagePath(ctx)
     } else {
         ActivityCompat.requestPermissions(
@@ -115,7 +114,7 @@ private fun getImagePath(ctx: Context): MutableList<String> {
     return imgList
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun gridView(context: Context) {
 
@@ -124,7 +123,7 @@ fun gridView(context: Context) {
 
     LazyVerticalGrid(
 
-        cells = GridCells.Fixed(3),
+        columns = GridCells.Fixed(3),
 
         modifier = Modifier.padding(10.dp)
     ) {
