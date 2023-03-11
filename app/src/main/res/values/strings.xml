@@ -15,4 +15,13 @@
     <string name="title_activity_image_view2">ImageView2</string>
     <string name="title_activity_prediction2">PredictionActivity2</string>
     <string name="title_activity_image_view3">ImageView3</string>
+
+    <string name="get_started">OnboardingScreen</string>
+    <string name="OnboardingTitle1">Get the calorie</string>
+    <string name="OnboardingTitle2">Keep the track of diet</string>
+    <string name="OnboardingTitle3">Get recommendations</string>
+
+    <string name="Desc1">Know the calorie value just by clicking a picture or searching the food.</string>
+    <string name="Desc2">Add and manage the foods that you take and maintain your diet.</string>
+    <string name="Desc3">Keep the health in check and get recommendations of what do you want to eat.</string>
 </resources>
