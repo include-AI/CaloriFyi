@@ -23,7 +23,7 @@ fun SplashScreen(navController: NavHostController) {
             .fillMaxSize()
             .background(splashcolor)
     ) {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.logo3))
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.calorifyi))
         val logoAnimationState =
             animateLottieCompositionAsState(composition = composition)
         LottieAnimation(

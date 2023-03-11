@@ -101,7 +101,7 @@
 //fun PredictView() {
 //
 //    var selectImages by remember { mutableStateOf(listOf<Uri>()) }
-
+//
 //    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) {
 //        selectImages = it
 //    }

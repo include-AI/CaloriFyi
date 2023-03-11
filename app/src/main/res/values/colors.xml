@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="usepurple">#A865C9</color>
     <color name="bgpurple">#f4ecfc</color>
+    <color name="splash_color">#161616</color>
+
 </resources>
