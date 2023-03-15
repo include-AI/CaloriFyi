@@ -88,6 +88,14 @@ class CameraActivity : ComponentActivity() {
         }
     }
 
+    private fun handleImageCapture(uri: Uri) {
+        Log.i("camera", "Image Captured: $uri")
+        shouldShowCamera.value = false
+
+        photoUri = uri
+        shouldShowPhoto.value = true
+    }
+
     private fun getOutputDirectory(): File {
         val mediaDir = externalMediaDirs.firstOrNull()?.let{
             File(it, resources.getString(R.string.app_name)).apply{
