@@ -95,7 +95,7 @@ private fun getImagePath(ctx: Context): MutableList<String> {
             // we will be only displaying 10 images
             // on below line we are breaking the loop
             // when array list is > 10
-            if (imgList.size > 1000) {
+            if (imgList.size > 500) {
                 break
             }
             // on below line we are moving our cursor position
