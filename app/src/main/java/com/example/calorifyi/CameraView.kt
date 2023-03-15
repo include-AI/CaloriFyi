@@ -182,7 +182,6 @@ fun SimpleCameraPreview(
             
             Button(
                 onClick = {
-
                     val imgCapture = imageCapture ?: return@Button
                     val photoFile = File(
                         outputDirectory,

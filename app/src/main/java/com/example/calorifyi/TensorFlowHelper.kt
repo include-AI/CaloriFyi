@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.example.calorifyi.ml.FruitModelV1Optimize
+import com.example.calorifyi.ml.FruitModelV2Optimize
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
@@ -14,7 +15,7 @@ object TensorFlowHelper {
 
     @Composable
     fun classifyImage(image: Bitmap? = null, callback : (@Composable (fruit : String) -> Unit)){
-        val model = FruitModelV1Optimize.newInstance(LocalContext.current)
+        val model = FruitModelV2Optimize.newInstance(LocalContext.current)
 
 // Creates inputs for reference.
         val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)

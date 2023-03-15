@@ -3,41 +3,45 @@ package com.example.calorifyi
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
+import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
+import android.os.Environment
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import coil.compose.rememberImagePainter
-import coil.imageLoader
 import com.example.calorifyi.ui.theme.CalorificatorTheme
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class CameraActivity : ComponentActivity() {
+    private lateinit var outputDirectory: File
+    private lateinit var cameraExecutor: ExecutorService
+
+    private var shouldShowCamera: MutableState<Boolean> = mutableStateOf(false)
 
     private lateinit var photoUri: Uri
-    private lateinit var bitmap: Bitmap
-    private var shouldShowCamera: MutableState<Boolean> = mutableStateOf(false)
     private var shouldShowPhoto: MutableState<Boolean> = mutableStateOf(false)
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ){ isGranted ->
@@ -48,27 +52,49 @@ class CameraActivity : ComponentActivity() {
             Log.i("camera", "Permission Denied")
         }
     }
-    @OptIn(ExperimentalPermissionsApi::class)
-    override fun onCreate(savedInstanceState: Bundle?){
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent{
-            CalorificatorTheme() {
+        setContent {
+            CalorificatorTheme {
+                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color= MaterialTheme.colors.background) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        if (shouldShowCamera.value) {
-                            CameraOpen(dir = getOutputDirectory(), onImageCaptured = ::handleImageCapture)
-                        }
+                    color = MaterialTheme.colors.background
+                ) {
+                    if (shouldShowCamera.value) {
+                        CameraOpen(dir = getOutputDirectory(), onImageCaptured = ::handleImageCaptured)
+                    }
 
-                        if (shouldShowPhoto.value) {
-                            Image(
-                                painter = rememberImagePainter(photoUri),
-                                contentDescription = null,
-                                modifier = Modifier.fillMaxSize()
-                            )
+                    if (shouldShowPhoto.value) {
+                        Image(
+                            painter = rememberImagePainter(photoUri),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        var imgBitmap: Bitmap? = null
+                        //val file: File = File(Environment.getExternalStorageDirectory(), "read.me")
+                        val uri = photoUri
+                        imgBitmap = BitmapFactory.decodeFile(uri.encodedPath)
+                        val scaledBitmap = imgBitmap?.let { Bitmap.createScaledBitmap(it,
+                            TensorFlowHelper.imageSize,
+                            TensorFlowHelper.imageSize, false) }
+
+                        Box(
+                            modifier = Modifier.fillMaxSize()
+                        ){
+
+                            TensorFlowHelper.classifyImage(scaledBitmap) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+
+
+                                    Text(text = "Image is classified as:")
+                                    Text(text = it, color = Color.White, fontSize = 24.sp)
+                                }
+                            }
                         }
 
                     }
@@ -76,6 +102,10 @@ class CameraActivity : ComponentActivity() {
             }
         }
         requestCameraPermission()
+
+        outputDirectory = getOutputDirectory()
+        cameraExecutor = Executors.newSingleThreadExecutor()
+
     }
 
     private fun requestCameraPermission(){
@@ -97,31 +127,64 @@ class CameraActivity : ComponentActivity() {
         }
     }
 
-    private fun handleImageCapture(uri: Uri) {
-        Log.i("camera", "Image Captured: $uri")
-
+    private fun handleImageCaptured(uri : Uri) {
         shouldShowCamera.value = false
 
         photoUri = uri
-
         shouldShowPhoto.value = true
-
-
-
     }
 
     private fun getOutputDirectory(): File {
-        val mediaDir = externalMediaDirs.firstOrNull()?.let{
-            File(it, resources.getString(R.string.app_name)).apply{
-                mkdirs()
-            }
+        val mediaDir = externalMediaDirs.firstOrNull()?.let {
+            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
         }
-        return if (mediaDir!=null && mediaDir.exists())
-            mediaDir else filesDir
+
+        return if (mediaDir != null && mediaDir.exists()) mediaDir else filesDir
+    }
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
     }
 }
 
 
+
+
+
+private fun takePhoto(
+    filenameFormat: String,
+    imageCapture: ImageCapture,
+    outputDirectory: File,
+    executor: Executor,
+    onImageCaptured: (Uri) -> Unit,
+    onError: (ImageCaptureException) -> Unit
+) {
+    val photoFile = File.createTempFile(
+        SimpleDateFormat(filenameFormat, Locale.US).format(System.currentTimeMillis()),
+        ".jpg",
+        outputDirectory
+    )
+
+    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+    imageCapture.takePicture(outputOptions, executor, object: ImageCapture.OnImageSavedCallback{
+        override fun onError(exception: ImageCaptureException){
+            Log.e("camera", "Take photo error:", exception)
+            onError(exception)
+        }
+
+        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults){
+            val savedUri = Uri.fromFile(photoFile)
+            onImageCaptured(savedUri)
+        }
+    })
+
+
+
+}
 
 
 
