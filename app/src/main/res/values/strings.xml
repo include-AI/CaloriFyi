@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Calorificator</string>
+    <string name="app_name">CaloriFyi</string>
     <string name="title_activity_second">SecondActivity</string>
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_model">ModelActivity</string>
@@ -12,11 +12,11 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="get_started">OnboardingScreen</string>
-    <string name="OnboardingTitle1">Get the calorie</string>
-    <string name="OnboardingTitle2">Keep the track of diet</string>
-    <string name="OnboardingTitle3">Get recommendations</string>
+    <string name="OnboardingTitle1">Getting Started!</string>
+    <string name="OnboardingTitle2">Calories - Just an input away</string>
+    <string name="OnboardingTitle3">Keeping the tracks</string>
 
-    <string name="Desc1">Know the calorie value just by clicking a picture or searching the food.</string>
-    <string name="Desc2">Add and manage the foods that you take and maintain your diet.</string>
-    <string name="Desc3">Keep the health in check and get recommendations of what do you want to eat.</string>
+    <string name="Desc2">Know the calorie value just by clicking a picture or searching the food.</string>
+    <string name="Desc3">Add and manage the foods that you take and maintain your diet.</string>
+    <string name="Desc1">Keep the health in check and get recommendations of what do you want to eat.</string>
 </resources>
