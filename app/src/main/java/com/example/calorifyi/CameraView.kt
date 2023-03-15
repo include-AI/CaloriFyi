@@ -34,10 +34,11 @@ import androidx.navigation.compose.rememberNavController
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.reflect.KFunction1
 
 
 @Composable
-fun CameraOpen(dir: File){
+fun CameraOpen(dir: File, onImageCaptured: KFunction1<Uri, Unit>){
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -46,7 +47,7 @@ fun CameraOpen(dir: File){
         context = context,
         lifecycleOwner = lifecycleOwner,
         outputDirectory = dir,
-        onMediaCaptured = { url -> }
+        onMediaCaptured = onImageCaptured
     )
 }
 
@@ -56,7 +57,7 @@ fun SimpleCameraPreview(
     context: Context,
     lifecycleOwner: LifecycleOwner,
     outputDirectory: File,
-    onMediaCaptured: (Uri?) -> Unit
+    onMediaCaptured: KFunction1<Uri, Unit>
     ){
     val navController = rememberNavController()
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }

@@ -2,24 +2,32 @@ package com.example.calorifyi
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import coil.compose.rememberImagePainter
+import coil.imageLoader
 import com.example.calorifyi.ui.theme.CalorificatorTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import java.io.File
@@ -27,6 +35,7 @@ import java.io.File
 class CameraActivity : ComponentActivity() {
 
     private lateinit var photoUri: Uri
+    private lateinit var bitmap: Bitmap
     private var shouldShowCamera: MutableState<Boolean> = mutableStateOf(false)
     private var shouldShowPhoto: MutableState<Boolean> = mutableStateOf(false)
     private val requestPermissionLauncher = registerForActivityResult(
@@ -51,7 +60,7 @@ class CameraActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         if (shouldShowCamera.value) {
-                            CameraOpen(dir = getOutputDirectory())
+                            CameraOpen(dir = getOutputDirectory(), onImageCaptured = ::handleImageCapture)
                         }
 
                         if (shouldShowPhoto.value) {
@@ -90,10 +99,15 @@ class CameraActivity : ComponentActivity() {
 
     private fun handleImageCapture(uri: Uri) {
         Log.i("camera", "Image Captured: $uri")
+
         shouldShowCamera.value = false
 
         photoUri = uri
+
         shouldShowPhoto.value = true
+
+
+
     }
 
     private fun getOutputDirectory(): File {
