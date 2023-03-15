@@ -1,4 +1,4 @@
-package com.example.calorificator
+package com.example.calorifyi
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -20,7 +20,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.calorificator.ui.theme.BGPurple
+import com.example.calorifyi.ui.theme.BGPurple
 import kotlinx.coroutines.launch
 
 

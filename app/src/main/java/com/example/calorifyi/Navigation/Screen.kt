@@ -1,4 +1,4 @@
-package com.example.calorificator.Navigation
+package com.example.calorifyi.Navigation
 
 sealed class Screen(val route: String) {
     object Splash : Screen("splash_screen")

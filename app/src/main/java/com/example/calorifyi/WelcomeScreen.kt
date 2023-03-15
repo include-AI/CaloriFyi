@@ -1,4 +1,4 @@
-package com.example.calorificator
+package com.example.calorifyi
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -15,8 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.calorificator.Navigation.Screen
-import com.example.calorificator.ui.theme.UsePurple
+import com.example.calorifyi.Navigation.Screen
+import com.example.calorifyi.ui.theme.UsePurple
 
 @Composable
 fun WelcomeScreen(navController: NavHostController) {

@@ -1,12 +1,12 @@
-package com.example.calorificator.Navigation
+package com.example.calorifyi.Navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.calorificator.HomeScreen
-import com.example.calorificator.SplashScreen
-import com.example.calorificator.WelcomeScreen
+import com.example.calorifyi.HomeScreen
+import com.example.calorifyi.SplashScreen
+import com.example.calorifyi.WelcomeScreen
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {

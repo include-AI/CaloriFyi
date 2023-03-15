@@ -1,4 +1,4 @@
-package com.example.calorificator
+package com.example.calorifyi
 
 import android.Manifest
 import android.content.Context
@@ -41,7 +41,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import coil.compose.rememberImagePainter
-import com.example.calorificator.ui.theme.CalorificatorTheme
+import com.example.calorifyi.ui.theme.CalorificatorTheme
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*

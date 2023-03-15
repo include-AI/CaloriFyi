@@ -1,4 +1,4 @@
-package com.example.calorificator
+package com.example.calorifyi
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.calorificator.ui.theme.CalorificatorTheme
+import com.example.calorifyi.ui.theme.CalorificatorTheme
 
 
 @Composable
