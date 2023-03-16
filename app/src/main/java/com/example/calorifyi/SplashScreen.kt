@@ -31,6 +31,7 @@ fun SplashScreen(navController: NavHostController) {
             progress = { logoAnimationState.progress }
         )
         if (logoAnimationState.isAtEnd && logoAnimationState.isPlaying) {
+            navController.popBackStack()
             navController.navigate(Screen.Onboarding.route)
         }
 
