@@ -23,7 +23,7 @@ fun SplashScreen(navController: NavHostController) {
             .fillMaxSize()
             .background(splashcolor)
     ) {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.logo3))
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.calorifyi))
         val logoAnimationState =
             animateLottieCompositionAsState(composition = composition)
         LottieAnimation(
@@ -31,7 +31,7 @@ fun SplashScreen(navController: NavHostController) {
             progress = { logoAnimationState.progress }
         )
         if (logoAnimationState.isAtEnd && logoAnimationState.isPlaying) {
-            navController.navigate(Screen.Home.route)
+            navController.navigate(Screen.Onboarding.route)
         }
 
     }
