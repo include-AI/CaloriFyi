@@ -1,4 +1,4 @@
-package com.example.calorificator
+package com.example.calorifyi
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,8 +12,8 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.calorificator.Navigation.Screen
-import com.example.calorificator.ui.theme.splashcolor
+import com.example.calorifyi.Navigation.Screen
+import com.example.calorifyi.ui.theme.splashcolor
 
 @Composable
 fun SplashScreen(navController: NavHostController) {

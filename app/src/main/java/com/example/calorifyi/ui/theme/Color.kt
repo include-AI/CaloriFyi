@@ -1,4 +1,4 @@
-package com.example.calorificator.ui.theme
+package com.example.calorifyi.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.example.calorificator
+package com.example.calorifyi
 
 import org.junit.Test
 
