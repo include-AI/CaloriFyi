@@ -215,7 +215,7 @@ fun SimpleCameraPreview(
                 modifier = Modifier
                     .size(70.dp)
                     .clip(CircleShape)
-                    .border(7.dp, Color.LightGray, CircleShape),
+                    .border(7.dp, Color.White, CircleShape),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
             ) {
                 
