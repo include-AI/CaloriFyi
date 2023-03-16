@@ -34,6 +34,5 @@ fun SplashScreen(navController: NavHostController) {
             navController.popBackStack()
             navController.navigate(Screen.Onboarding.route)
         }
-
     }
 }
