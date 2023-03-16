@@ -168,6 +168,7 @@ fun HomeScreen(){
 
 @Composable
 fun SideDrawer(){
+
     val cam2Context = LocalContext.current
     Column(
         modifier = Modifier
@@ -195,9 +196,9 @@ fun SideDrawer(){
             }
 
         }
-
     }
 }
+
 
 
 @Preview

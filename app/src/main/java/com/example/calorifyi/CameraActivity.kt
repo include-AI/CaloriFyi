@@ -33,6 +33,7 @@ import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+
 class CameraActivity : ComponentActivity() {
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
@@ -63,6 +64,7 @@ class CameraActivity : ComponentActivity() {
                 ) {
                     if (shouldShowCamera.value) {
                         CameraOpen(dir = getOutputDirectory(), onImageCaptured = ::handleImageCaptured)
+
                     }
 
                     if (shouldShowPhoto.value) {
@@ -97,6 +99,7 @@ class CameraActivity : ComponentActivity() {
                             }
                         }
 
+
                     }
                 }
             }
@@ -126,6 +129,7 @@ class CameraActivity : ComponentActivity() {
             else -> requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
     }
+
 
     private fun handleImageCaptured(uri : Uri) {
         shouldShowCamera.value = false
@@ -185,7 +189,3 @@ private fun takePhoto(
 
 
 }
-
-
-
-
