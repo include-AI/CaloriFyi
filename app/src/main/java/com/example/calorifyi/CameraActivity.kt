@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -37,6 +38,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -80,12 +82,7 @@ class CameraActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     if (shouldShowCamera.value) {
-                        CameraView(
-                            outputDirectory = outputDirectory,
-                            executor = cameraExecutor,
-                            onImageCaptured = ::handleImageCapture,
-                            onError = { Log.e("camera", "View error:", it) }
-                        )
+                        CameraOpen(dir = getOutputDirectory(), onImageCaptured = ::handleImageCaptured)
                     }
 
                     if (shouldShowPhoto.value) {
@@ -94,6 +91,31 @@ class CameraActivity : ComponentActivity() {
                             contentDescription = null,
                             modifier = Modifier.fillMaxSize()
                         )
+                        var imgBitmap: Bitmap? = null
+                        //val file: File = File(Environment.getExternalStorageDirectory(), "read.me")
+                        val uri = photoUri
+                        imgBitmap = BitmapFactory.decodeFile(uri.encodedPath)
+                        val scaledBitmap = imgBitmap?.let { Bitmap.createScaledBitmap(it,
+                            TensorFlowHelper.imageSize,
+                            TensorFlowHelper.imageSize, false) }
+
+                        Box(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+
+                            TensorFlowHelper.classifyImage(scaledBitmap) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+
+
+                                    Text(text = "Image is classified as:")
+                                    Text(text = it, color = Color.White, fontSize = 24.sp)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -124,7 +146,7 @@ class CameraActivity : ComponentActivity() {
         }
     }
 
-    private fun handleImageCapture(uri: Uri) {
+    private fun handleImageCaptured(uri: Uri) {
         Log.i("camera", "Image Captured: $uri")
         shouldShowCamera.value = false
 
@@ -152,209 +174,39 @@ class CameraActivity : ComponentActivity() {
 
 
 
-private fun takePhoto(
-    filenameFormat: String,
-    imageCapture: ImageCapture,
-    outputDirectory: File,
-    executor: Executor,
-    onImageCaptured: (Uri) -> Unit,
-    onError: (ImageCaptureException) -> Unit
-) {
-    val photoFile = File.createTempFile(
-        SimpleDateFormat(filenameFormat, Locale.US).format(System.currentTimeMillis()),
-        ".jpg",
-        outputDirectory
-    )
-
-    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-
-    imageCapture.takePicture(outputOptions, executor, object: ImageCapture.OnImageSavedCallback{
-        override fun onError(exception: ImageCaptureException){
-            Log.e("camera", "Take photo error:", exception)
-            onError(exception)
-        }
-
-        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults){
-            val savedUri = Uri.fromFile(photoFile)
-            onImageCaptured(savedUri)
-        }
-    })
-
-
-
-}
-
-
-private suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutine { continuation ->
-    ProcessCameraProvider.getInstance(this).also { cameraProvider ->
-        cameraProvider.addListener({
-            continuation.resume(cameraProvider.get())
-        }, ContextCompat.getMainExecutor(this))
-    }
-}
-
-
-@Composable
-fun CameraView(
-    outputDirectory: File,
-    executor: Executor,
-    onImageCaptured: (Uri) -> Unit,
-    onError: (ImageCaptureException) -> Unit) {
+//private fun takePhoto(
+//    filenameFormat: String,
+//    imageCapture: ImageCapture,
+//    outputDirectory: File,
+//    executor: Executor,
+//    onImageCaptured: (Uri) -> Unit,
+//    onError: (ImageCaptureException) -> Unit
+//) {
+//    val photoFile = File.createTempFile(
+//        SimpleDateFormat(filenameFormat, Locale.US).format(System.currentTimeMillis()),
+//        ".jpg",
+//        outputDirectory
+//    )
+//
+//    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+//
+//    imageCapture.takePicture(outputOptions, executor, object: ImageCapture.OnImageSavedCallback{
+//        override fun onError(exception: ImageCaptureException){
+//            Log.e("camera", "Take photo error:", exception)
+//            onError(exception)
+//        }
+//
+//        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults){
+//            val savedUri = Uri.fromFile(photoFile)
+//            onImageCaptured(savedUri)
+//        }
+//    })
+//
+//
+//
+//}
 
 
 
-    // 1
-    val lensFacingFront = CameraSelector.LENS_FACING_FRONT
-    val lensFacingBack = CameraSelector.LENS_FACING_BACK
-    val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    val preview = Preview.Builder().build()
-    val previewView = remember { PreviewView(context) }
-    val imageCapture: ImageCapture = remember { ImageCapture.Builder().build() }
-    val cameraSelector = CameraSelector.Builder()
-        .build()
-
-    // 2
-    LaunchedEffect(lensFacingBack) {
-        val cameraProvider = context.getCameraProvider()
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(
-            lifecycleOwner,
-            cameraSelector,
-            preview,
-            imageCapture
-        )
-
-        preview.setSurfaceProvider(previewView.surfaceProvider)
-    }
-
-    // 3
-    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
-        AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
 
 
-        Row(
-        ){
-            IconButton(
-                modifier = Modifier.padding(bottom = 20.dp),
-                onClick = {
-
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Sharp.FlipCameraAndroid,
-                        contentDescription = "Take Picture",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .padding(1.dp)
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(
-                modifier = Modifier.padding(bottom = 20.dp),
-                onClick = {
-                    Log.i("camera", "ON CLICK")
-                    takePhoto(
-                        filenameFormat = "yyyy-MM-dd-HH-mm-ss-SSS",
-                        imageCapture = imageCapture,
-                        outputDirectory = outputDirectory,
-                        executor = executor,
-                        onImageCaptured = onImageCaptured,
-                        onError = onError
-                    )
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Sharp.Lens,
-                        contentDescription = "Take Picture",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .padding(1.dp)
-                            .border(1.dp, Color.White, CircleShape)
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            var imageUri by remember {
-                mutableStateOf<Uri?>(null)
-            }
-            val context = LocalContext.current
-            val bitmap =  remember {
-                mutableStateOf<Bitmap?>(null)
-            }
-
-            val launcher = rememberLauncherForActivityResult(contract =
-            ActivityResultContracts.GetContent()) { uri: Uri? ->
-                imageUri = uri
-            }
-            IconButton(
-                modifier = Modifier.padding(bottom = 20.dp),
-                onClick = {
-                    launcher.launch("image/*")
-
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Sharp.PhotoLibrary,
-                        contentDescription = "Take Picture",
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(80.dp)
-                            .padding(1.dp)
-                    )
-                }
-            )
-
-        }
-
-    }
-}
-
-@Composable
-fun RequestContentPermission() {
-    var imageUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
-    val context = LocalContext.current
-    val bitmap =  remember {
-        mutableStateOf<Bitmap?>(null)
-    }
-
-    val launcher = rememberLauncherForActivityResult(contract =
-    ActivityResultContracts.GetContent()) { uri: Uri? ->
-        imageUri = uri
-    }
-    Column() {
-        Button(onClick = {
-            launcher.launch("image/*")
-        }) {
-            Text(text = "Pick image")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        imageUri?.let {
-            if (Build.VERSION.SDK_INT < 28) {
-                bitmap.value = MediaStore.Images
-                    .Media.getBitmap(context.contentResolver,it)
-
-            } else {
-                val source = ImageDecoder
-                    .createSource(context.contentResolver,it)
-                bitmap.value = ImageDecoder.decodeBitmap(source)
-            }
-
-            bitmap.value?.let {  btm ->
-                Image(bitmap = btm.asImageBitmap(),
-                    contentDescription =null,
-                    modifier = Modifier.size(400.dp))
-            }
-        }
-
-
-    }
-}

@@ -16,11 +16,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.calorifyi.ui.theme.BGPurple
+import com.example.calorifyi.ui.theme.CalorificatorTheme
 import kotlinx.coroutines.launch
 
 
@@ -163,14 +168,42 @@ fun HomeScreen(){
 
 @Composable
 fun SideDrawer(){
+    val cam2Context = LocalContext.current
     Column(
         modifier = Modifier
             .background(BGPurple)
             .fillMaxSize()
     ) {
+        Column() {
+            Text(
+                text = "Menu",
+                fontFamily = FontFamily.SansSerif,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(start = 20.dp, top = 30.dp)
+            )
+            Spacer(modifier = Modifier.height(40.dp))
+            Card() {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) },
+
+                    ){
+                    Text(text = "Calories in Gallery")
+                }
+            }
+
+        }
 
     }
 }
 
 
-
+@Preview
+@Composable
+fun SideDrawerPreview(){
+    CalorificatorTheme {
+        SideDrawer()
+    }
+}

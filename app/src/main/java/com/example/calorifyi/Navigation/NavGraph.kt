@@ -5,9 +5,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.calorifyi.HomeScreen
+import com.example.calorifyi.OnBoarding
 import com.example.calorifyi.SplashScreen
 import com.example.calorifyi.WelcomeScreen
+import com.google.accompanist.pager.ExperimentalPagerApi
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
     NavHost(
@@ -19,6 +22,9 @@ fun SetupNavGraph(navController: NavHostController) {
         }
         composable(route = Screen.Home.route) {
             HomeScreen()
+        }
+        composable(route = Screen.Onboarding.route){
+            OnBoarding(navController = navController)
         }
         composable(route = Screen.Welcome.route){
             WelcomeScreen(navController = navController)
