@@ -20,14 +20,14 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.example.calorifyi.ui.theme.CalorificatorTheme
+import com.example.calorifyi.ui.theme.CaloriFyiTheme
 
 
 class ImageView3 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalorificatorTheme {
+            CaloriFyiTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -68,7 +68,7 @@ fun PredictionShow(ctx: Context, pred: Bitmap? ){
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview2() {
-    CalorificatorTheme {
+    CaloriFyiTheme {
 
     }
 }

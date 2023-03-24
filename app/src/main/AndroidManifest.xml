@@ -6,11 +6,13 @@
     <uses-feature android:name="android.hardware.camera2.any" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature android:name="android.hardware.location.gps" />
 
@@ -25,30 +27,35 @@
         android:theme="@style/Theme.CaloriFyi"
         tools:targetApi="31">
         <activity
-            android:name="com.example.calorifyi.ImageView3"
+            android:name=".ReceptionActivity"
+            android:exported="false"
+            android:label="@string/title_activity_reception"
+            android:theme="@style/Theme.CaloriFyi" />
+        <activity
+            android:name=".ImageView3"
             android:exported="false"
             android:label="@string/title_activity_image_view3"
             android:theme="@style/Theme.CaloriFyi" />
         <activity
-            android:name="com.example.calorifyi.PredictionActivity2"
+            android:name=".PredictionActivity2"
             android:exported="false"
             android:label="@string/title_activity_prediction2"
             android:theme="@style/Theme.CaloriFyi" />
         <activity
-            android:name="com.example.calorifyi.ImageView2"
+            android:name=".ImageView2"
             android:exported="false"
             android:label="@string/title_activity_image_view2"
             android:theme="@style/Theme.CaloriFyi" />
         <activity
-            android:name="com.example.calorifyi.ImageView"
+            android:name=".ImageView"
             android:exported="false"
             android:label="@string/title_activity_image_view"
             android:theme="@style/Theme.CaloriFyi" />
         <activity
-            android:name="com.example.calorifyi.PredictionActivity"
+            android:name=".PredictionActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.calorifyi.CameraActivity"
+            android:name=".CameraActivity"
             android:exported="false"
             android:label="@string/title_activity_camera"
             android:theme="@style/Theme.CaloriFyi">
@@ -57,7 +64,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name="com.example.calorifyi.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.CaloriFyi">

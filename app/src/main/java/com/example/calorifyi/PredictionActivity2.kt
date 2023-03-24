@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.rememberImagePainter
-import com.example.calorifyi.ui.theme.CalorificatorTheme
+import com.example.calorifyi.ui.theme.CaloriFyiTheme
 import java.io.File
 
 class PredictionActivity2 : ComponentActivity() {
@@ -22,7 +22,7 @@ class PredictionActivity2 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalorificatorTheme {
+            CaloriFyiTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -61,7 +61,7 @@ fun MakePrediction(ctx: Context, img2: String?){
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    CalorificatorTheme {
+    CaloriFyiTheme {
 
     }
 }

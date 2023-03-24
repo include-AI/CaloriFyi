@@ -22,14 +22,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.calorifyi.TensorFlowHelper.imageSize
-import com.example.calorifyi.ui.theme.CalorificatorTheme
+import com.example.calorifyi.ui.theme.CaloriFyiTheme
 import java.io.File
 
 class ImageView2 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalorificatorTheme {
+            CaloriFyiTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),

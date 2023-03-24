@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.calorifyi.TensorFlowHelper.imageSize
-import com.example.calorifyi.ui.theme.CalorificatorTheme
+import com.example.calorifyi.ui.theme.CaloriFyiTheme
 
 
 class PredictionActivity : ComponentActivity() {
@@ -39,7 +39,7 @@ class PredictionActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalorificatorTheme {
+            CaloriFyiTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background

@@ -2,6 +2,7 @@ package com.example.calorifyi
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -43,7 +44,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import coil.compose.rememberImagePainter
-import com.example.calorifyi.ui.theme.CalorificatorTheme
+import com.example.calorifyi.ui.theme.CaloriFyiTheme
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,6 +55,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class CameraActivity : ComponentActivity() {
+    private lateinit var context : Context
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
 
@@ -75,7 +77,7 @@ class CameraActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalorificatorTheme {
+            CaloriFyiTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -113,6 +115,17 @@ class CameraActivity : ComponentActivity() {
 
                                     Text(text = "Image is classified as:")
                                     Text(text = it, color = Color.White, fontSize = 24.sp)
+                                    var modelOutput = it
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    context = LocalContext.current
+                                    Button(onClick = {
+                                        val i = Intent(context, ReceptionActivity::class.java)
+                                        i.putExtra("query_image", modelOutput)
+                                        i.data = photoUri
+                                        context.startActivity(i)
+                                    }) {
+
+                                    }
                                 }
                             }
                         }
