@@ -36,15 +36,14 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.calorifyi.Navigation.BottomMenuContent
-import com.example.calorifyi.ui.theme.BGPurple
-import com.example.calorifyi.ui.theme.roboto
-import com.example.calorifyi.ui.theme.splashcolor
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
-import com.example.calorifyi.ui.theme.CaloriFyiTheme
+import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.Cyan
+import com.example.calorifyi.ui.theme.*
 
 
 @Composable
@@ -189,6 +188,9 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
                                     macrosList(name = "Carbs")
                                     macrosList(name = "Fats")
                                 }
+
+
+
 //                                Column(
 //                                    modifier = Modifier.fillMaxWidth()
 //                                ){
@@ -196,12 +198,18 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
 //                                }
                             }
                         }
+                        Spacer(modifier = Modifier.height(214.dp))
+                        BottomMenu(items = listOf(
+                            BottomMenuContent("Home", R.drawable.home),
+                            BottomMenuContent("Progress", R.drawable.progress),
+                            BottomMenuContent("Analysis", R.drawable.analysis),
+                            BottomMenuContent("Diet", R.drawable.diet)))
 
                     }
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
-
+1
                     FloatingActionButton(
                         modifier = Modifier
                             .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 150.dp)
@@ -215,12 +223,8 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
                     }
                 }
 
-
             }
         )
-        BottomMenu(items = listOf(
-            BottomMenuContent("Home", R.drawable.add_circle_48px)
-        ))
     }
 
 }
@@ -337,9 +341,9 @@ fun macrosList(name: String){
 fun BottomMenu(
     items: List<BottomMenuContent>,
     modifier: Modifier = Modifier,
-    activeHighLightColor: Color = Color.Black,
-    activeTextColor: Color = Color.White,
-    inactiveTextColor: Color = Green,
+    activeHighLightColor: Color = colorResource(id = R.color.bgpurple),
+    activeTextColor: Color = Color.Black,
+    inactiveTextColor: Color = Color.Black,
     initialSelectedItemIndex: Int = 0)
 {
     var selectedItemIndex by remember {
@@ -350,15 +354,18 @@ fun BottomMenu(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
+            .background(colorResource(id = R.color.usepurple))
             .padding(15.dp)
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
     ) {
         items.forEachIndexed {index, item ->
             BottomMenuItem(
                 item = item,
                 isSelected = index == selectedItemIndex,
+                activeHighLightColor = activeHighLightColor,
                 activeTextColor=activeTextColor,
                 inactiveTextColor = inactiveTextColor){
-
+                selectedItemIndex = index
         }
         }
     }
@@ -369,8 +376,8 @@ fun BottomMenuItem(
     item: BottomMenuContent,
     isSelected: Boolean = false,
     activeHighLightColor: Color = Color.Black,
-    inactiveTextColor: Color = Green,
-    activeTextColor: Color = Color.White,
+    inactiveTextColor: Color = Black,
+    activeTextColor: Color = Color.Black,
     onItemClick: () -> Unit)
 {
     Column(
@@ -392,13 +399,13 @@ fun BottomMenuItem(
             painter = painterResource(id = item.iconId),
             contentDescription = item.title,
             tint = if(isSelected) activeTextColor else inactiveTextColor,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(15.dp)
         )
     }
         Text(
             text = item.title,
-            color = if(isSelected) activeTextColor else inactiveTextColor
-        )
+            color = if(isSelected) activeTextColor else inactiveTextColor,
+            fontSize = 13.sp)
 
     }
 }
@@ -407,6 +414,8 @@ fun BottomMenuItem(
 @Composable
 fun SideDrawerPreview(){
     CaloriFyiTheme {
-        HomeScreen()
+        BottomMenu(items =  listOf(
+            BottomMenuContent(title = "Home", R.drawable.ic_nhome_foreground)
+        ))
     }
 }

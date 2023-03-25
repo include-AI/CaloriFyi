@@ -21,7 +21,6 @@ import kotlinx.coroutines.withContext
 import java.sql.DriverManager
 
 //receiving objects
-
 data class Reception(val quantity: Int, val calories: Int)
 
 class ReceptionActivity: ComponentActivity() {
@@ -29,6 +28,7 @@ class ReceptionActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CaloriFyiTheme {
+                //taking the inputs to the next activity, i.e., name of the food into modelOutput
                 var foodImage: Uri? = intent.data
                 var modelOutput = intent.getStringExtra("query_image")
                 CalorieDisplay(modelOutput, foodImage)
@@ -36,17 +36,19 @@ class ReceptionActivity: ComponentActivity() {
         }
     }
 
-
+    //this is the main thread
     @Composable
     fun CalorieDisplay(modelOutput: String?, foodImage: Uri?) {
         var reception by remember(modelOutput) {
             mutableStateOf(emptyList<Reception>())
         }
 
+        //async task
         LaunchedEffect(modelOutput) {
             val newReception = recep(modelOutput)
             reception = newReception
         }
+        //displaying
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -62,7 +64,7 @@ class ReceptionActivity: ComponentActivity() {
         }
     }
 
-//function
+//making connection
 
     suspend fun recep(modelOutput: String?) = withContext(Dispatchers.IO) {
         val host = "SQL8002.site4now.net"
