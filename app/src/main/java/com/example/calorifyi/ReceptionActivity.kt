@@ -77,7 +77,7 @@ class ReceptionActivity: ComponentActivity() {
             .getConnection(url, username, password)
 
         // the query is only prepared not executed
-        val query = connection.prepareStatement("SELECT Calories, Quantity FROM calories_dataset WHERE Name_of_Food = '$modelOutput'")
+        val query = connection.prepareStatement("SELECT Calories, Quantity FROM test WHERE Name_of_Food = '$modelOutput'")
         // the query is executed and results are fetched
         val result = query.executeQuery()
         // an empty list for holding the results
