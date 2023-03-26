@@ -1,5 +1,6 @@
 package com.example.calorifyi
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -19,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
@@ -41,11 +41,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.Blue
-import androidx.compose.ui.graphics.Color.Companion.Cyan
 import com.example.calorifyi.ui.theme.*
 
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
     val scaffoldState = rememberScaffoldState()
@@ -163,13 +162,13 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
                                     ) {
                                         Text(
                                             text = "Calories Remaining",
-                                            style = MaterialTheme.typography.h5,
+                                            style = Typography.h5,
 //                                            fontWeight = FontWeight.Bold,
-                                            fontFamily = roboto
+                                            fontFamily = googleSans
                                         )
                                         Text(
                                             text = "$currentCalorie / $limitingCalorie",
-                                            style = MaterialTheme.typography.body1
+                                            style = Typography.body1
                                         )
                                     }
                                     Box(
@@ -242,7 +241,7 @@ fun SideDrawer(){
         Column() {
             Text(
                 text = "Menu",
-                fontFamily = FontFamily.SansSerif,
+                fontFamily = googleSans,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
@@ -255,7 +254,9 @@ fun SideDrawer(){
                     onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) },
 
                     ){
-                    Text(text = "Calories in Gallery")
+                    Text(
+                        text = "Calories in Gallery"
+                        )
                 }
             }
 
@@ -326,11 +327,11 @@ fun macrosList(name: String){
                     modifier = Modifier
                         .weight(1f)
                 ) {
-                    Text(text = name, fontSize = 14.sp, fontFamily = roboto)
+                    Text(text = name, fontSize = 14.sp, fontFamily = googleSans)
                     Text(text = "- / -")
                 }
                 OutlinedButton(onClick = { /*TODO*/ }) {
-                    Text(text = "+", fontFamily = roboto)
+                    Text(text = "+", fontFamily = googleSans)
                 }
             }
         }

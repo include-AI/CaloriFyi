@@ -29,7 +29,7 @@ import androidx.navigation.NavHostController
 import com.example.calorifyi.Navigation.OnboardingItems
 import com.example.calorifyi.Navigation.Screen
 import com.example.calorifyi.ui.theme.onb
-import com.example.calorifyi.ui.theme.roboto
+import com.example.calorifyi.ui.theme.googleSans
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -119,7 +119,7 @@ fun TopSection(onBackClick: () -> Unit = {}, onSkipClick: () -> Unit = {}) {
         ) {
             Text(text = "Skip", style = TextStyle(fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                fontFamily = roboto
+                fontFamily = googleSans
             ),
                 color = MaterialTheme.colorScheme.onBackground)
         }
@@ -235,7 +235,7 @@ fun OnBoardingItem(items: OnboardingItems.OnBoardingItems) {
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 letterSpacing = 1.sp,
-                fontFamily = roboto
+                fontFamily = googleSans
             )
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -250,7 +250,7 @@ fun OnBoardingItem(items: OnboardingItems.OnBoardingItems) {
                     .padding(end = 20.dp)
                     .padding(top = 20.dp),
                 letterSpacing = 0.sp,
-                fontFamily = roboto
+                fontFamily = googleSans
             )
         }
     }

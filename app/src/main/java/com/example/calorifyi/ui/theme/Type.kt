@@ -22,14 +22,29 @@ val roboto = FontFamily(
     Font(R.font.roboto_thinitalic)
 )
 
+val googleSans = FontFamily(
+    Font(R.font.productsans_regular),
+    Font(R.font.productsans_bold),
+    Font(R.font.productsans_bolditalic),
+    Font(R.font.productsans_black),
+    Font(R.font.productsans_blackitalic),
+    Font(R.font.productsans_light),
+    Font(R.font.productsans_lightitalic),
+    Font(R.font.productsans_italic),
+    Font(R.font.productsans_medium),
+    Font(R.font.productsans_mediumitalic),
+    Font(R.font.productsans_thin),
+    Font(R.font.productsans_thinitalic)
+)
+
 val Typography = Typography(
     h1 = TextStyle(
-        fontFamily = roboto,
+        fontFamily = googleSans,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     body1 = TextStyle(
-        fontFamily = roboto,
+        fontFamily = googleSans,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     )
