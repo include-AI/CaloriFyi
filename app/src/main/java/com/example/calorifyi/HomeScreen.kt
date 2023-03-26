@@ -248,15 +248,13 @@ fun SideDrawer(){
                     .padding(start = 20.dp, top = 30.dp)
             )
             Spacer(modifier = Modifier.height(40.dp))
-            Card() {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) },
 
-                    ){
-                    Text(
-                        text = "Calories in Gallery"
-                        )
+            LazyColumn{
+                item {
+                    DrawerItem(title = "Calories in Gallery", onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) })
+//                    DrawerItem(title = "Test 1", onClick = {})
+//                    DrawerItem(title = "Test 2", onClick = {})
+//                    DrawerItem(title = "Test 3", onClick = {})
                 }
             }
 
