@@ -183,9 +183,9 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
                                     modifier = Modifier
                                         .wrapContentSize()
                                         ){
-                                    macrosList(name = "Protein")
-                                    macrosList(name = "Carbs")
-                                    macrosList(name = "Fats")
+                                    MacrosList(name = "Protein")
+                                    MacrosList(name = "Carbs")
+                                    MacrosList(name = "Fats")
                                 }
 
 
@@ -249,14 +249,14 @@ fun SideDrawer(){
             )
             Spacer(modifier = Modifier.height(40.dp))
 
-            LazyColumn{
-                item {
-                    DrawerItem(title = "Calories in Gallery", onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) })
-//                    DrawerItem(title = "Test 1", onClick = {})
-//                    DrawerItem(title = "Test 2", onClick = {})
-//                    DrawerItem(title = "Test 3", onClick = {})
-                }
-            }
+//            LazyColumn{
+//                item {
+//                    DrawerItem(title = "Calories in Gallery", onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) })
+////                    DrawerItem(title = "Test 1", onClick = {})
+////                    DrawerItem(title = "Test 2", onClick = {})
+////                    DrawerItem(title = "Test 3", onClick = {})
+//                }
+//            }
 
         }
 
@@ -311,7 +311,7 @@ fun CircularProgressBar(
 }
 
 @Composable
-fun macrosList(name: String){
+fun MacrosList(name: String){
     Surface(
         color = colorResource(id = R.color.bgpurple),
         modifier = Modifier.padding(vertical = 1.dp, horizontal = 8.dp)

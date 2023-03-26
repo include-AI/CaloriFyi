@@ -27,6 +27,11 @@
         android:theme="@style/Theme.CaloriFyi"
         tools:targetApi="31">
         <activity
+            android:name=".CameraActivity"
+            android:exported="false"
+            android:label="@string/title_activity_camera"
+            android:theme="@style/Theme.CaloriFyi" />
+        <activity
             android:name=".ReceptionActivity"
             android:exported="false"
             android:label="@string/title_activity_reception"
@@ -54,15 +59,6 @@
         <activity
             android:name=".PredictionActivity"
             android:exported="false" />
-        <activity
-            android:name=".CameraActivity"
-            android:exported="false"
-            android:label="@string/title_activity_camera"
-            android:theme="@style/Theme.CaloriFyi">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"

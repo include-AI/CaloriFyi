@@ -15,7 +15,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
-    import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -42,7 +42,7 @@ class ImageView : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     requestPermissions(LocalContext.current, this)
-                    gridView(LocalContext.current)
+                    GridView(LocalContext.current)
                 }
             }
         }
@@ -116,7 +116,7 @@ private fun getImagePath(ctx: Context): MutableList<String> {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun gridView(context: Context) {
+fun GridView(context: Context) {
 
     var imgList: MutableList<String> = ArrayList()
     imgList = getImagePath(context)
