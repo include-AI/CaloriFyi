@@ -107,4 +107,6 @@ dependencies {
 
     //Hikari CP for Connection pooling
     implementation("com.zaxxer:HikariCP:5.0.0")
+
+//    implementation "javax.security.sasl:sasl-api:1.0.1"
 }

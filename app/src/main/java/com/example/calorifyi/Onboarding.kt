@@ -54,7 +54,7 @@ fun OnBoarding(navController: NavHostController) {
                 }
             },
             onSkipClick = {
-                navController.navigate(Screen.Home.route)
+                navController.navigate(Screen.LogIn.route)
             }
         )
 

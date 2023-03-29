@@ -84,6 +84,7 @@ fun SimpleCameraPreview(
                             setAnalyzer(executor, FaceAnalyzer())
                         }
                     imageCapture = ImageCapture.Builder()
+//                        .setTargetAspectRatio(AspectRatio.RATIO_4_3)
                         .setTargetRotation(previewView.display.rotation)
                         .build()
                     val cameraSelector = CameraSelector.Builder()
@@ -102,7 +103,7 @@ fun SimpleCameraPreview(
                 previewView
             }
         )
-        
+
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -125,7 +126,7 @@ fun SimpleCameraPreview(
 
         }
 
-        
+
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -179,7 +180,7 @@ fun SimpleCameraPreview(
                     tint = MaterialTheme.colors.surface)
             }
 
-            
+
             Button(
                 onClick = {
                     val imgCapture = imageCapture ?: return@Button
@@ -206,7 +207,7 @@ fun SimpleCameraPreview(
                             override fun onError(exception: ImageCaptureException) {
                                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
                             }
-                            
+
 
 
                         }
@@ -218,13 +219,13 @@ fun SimpleCameraPreview(
                     .border(7.dp, Color.White, CircleShape),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
             ) {
-                
+
             }
 
 
             IconButton(
                 onClick = {
-                    context.startActivity(Intent(context, ImageView::class.java))
+                    context.startActivity(Intent(context, com.example.calorifyi.ImageView::class.java))
                 },
             ){
                 Icon(
@@ -236,7 +237,7 @@ fun SimpleCameraPreview(
             }
         }
     }
-    
+
 }
 
 private class FaceAnalyzer(): ImageAnalysis.Analyzer{
