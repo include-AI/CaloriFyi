@@ -33,14 +33,10 @@ class MainActivity : ComponentActivity() {
 
 }
 
-@Composable
-fun Calorificator(){
-}
-
 @Preview
 @Composable
-fun CalorificatorpPreview(){
-    CaloriFyiTheme {
+fun CaloriFyiPreview(){
+    CaloriFyiTheme{
     }
 }
 

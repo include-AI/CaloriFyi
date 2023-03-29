@@ -1,10 +1,16 @@
 package com.example.calorifyi.Navigation
 
+import SignUp
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.calorifyi.*
+import com.example.calorifyi.HomeScreen
+import com.example.calorifyi.OnBoarding
+import com.example.calorifyi.SplashScreen
+import com.example.calorifyi.User.LogIn
+import com.example.calorifyi.WelcomeScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @OptIn(ExperimentalPagerApi::class)
@@ -25,6 +31,12 @@ fun SetupNavGraph(navController: NavHostController) {
         }
         composable(route = Screen.Welcome.route){
             WelcomeScreen(navController = navController)
+        }
+        composable(route = Screen.LogIn.route){
+            LogIn(navController = navController)
+        }
+        composable(route = Screen.SignUp.route){
+            SignUp(navController = navController)
         }
     }
 }

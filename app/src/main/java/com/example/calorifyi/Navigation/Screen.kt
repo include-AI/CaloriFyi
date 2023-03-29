@@ -5,13 +5,12 @@ import com.example.calorifyi.R
 sealed class Screen(val route: String) {
     object Splash : Screen("splash_screen")
     object Home : Screen("Home_screen")
-    object Welcome : Screen( "welcome_screen")
-
+    object Welcome : Screen("welcome_screen")
     object Onboarding : Screen("Onboarding_Screen")
     object CameraView : Screen("camera_view")
     object AppView : Screen("app_view")
-
-
+    object LogIn : Screen("LogIn")
+    object SignUp : Screen("SignUp")
 }
 
 sealed class BottomNavigationItems(val route: String, var icon: Int, var title: String){
@@ -20,4 +19,5 @@ sealed class BottomNavigationItems(val route: String, var icon: Int, var title: 
     object Analysis : BottomNavigationItems("analysis_view", R.drawable.analysis, "Analysis")
     object Diet : BottomNavigationItems("diet_view", R.drawable.diet, "Diet")
 }
+
 

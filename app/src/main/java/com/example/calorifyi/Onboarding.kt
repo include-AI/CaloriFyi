@@ -157,7 +157,7 @@ fun BottomSection(size: Int, index: Int, navController: NavHostController, funct
     ){
         Button(
             onClick = {
-                navController.navigate(Screen.AppView.route)
+                navController.navigate(Screen.LogIn.route)
             },
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp))
@@ -220,9 +220,9 @@ fun OnBoardingItem(items: OnboardingItems.OnBoardingItems) {
                 ),
             contentScale = ContentScale.FillBounds
         )
-
-//        Spacer(modifier = Modifier.height(15.dp))
     }
+
+
     Box(){
         Column(
             verticalArrangement = Arrangement.Center,
@@ -231,7 +231,7 @@ fun OnBoardingItem(items: OnboardingItems.OnBoardingItems) {
         ) {
             Text(
                 text = stringResource(id = items.title),
-                style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold),
                 // fontSize = 24.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -245,7 +245,7 @@ fun OnBoardingItem(items: OnboardingItems.OnBoardingItems) {
 
             Text(
                 text = stringResource(id = items.desc),
-                style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Normal),
+                style = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.Normal),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Center,

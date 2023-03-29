@@ -18,14 +18,15 @@
 
     <string name="get_started">OnboardingScreen</string>
     <string name="OnboardingTitle1">Getting Started!</string>
-    <string name="OnboardingTitle2">Calories - Just an input away</string>
-    <string name="OnboardingTitle3">Keeping the tracks</string>
+    <string name="OnboardingTitle2">Discover around the globe</string>
+    <string name="OnboardingTitle3">Track your diets</string>
 
-    <string name="Desc2">Know the calorie value just by clicking a picture or searching the food.</string>
-    <string name="Desc3">Add and manage the foods that you take and maintain your diet.</string>
+    <string name="Desc3">Count calories and track your macros by clicking a picture or searching the food.</string>
+    <string name="Desc2">Join a large community of health and fitness conscious people, know their experiences / share your own.</string>
     <string name="Desc1">Keep the health in check and get recommendations of what do you want to eat.</string>
     <string name="title_activity_reception">ReceptionActivity</string>
     <string name="title_activity_progress">ProgressActivity</string>
     <string name="title_activity_analysis">AnalysisActivity</string>
     <string name="title_activity_diet">DietActivity</string>
+    <string name="title_activity_sign_up">SignUp</string>
 </resources>
