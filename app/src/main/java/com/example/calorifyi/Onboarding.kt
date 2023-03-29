@@ -48,13 +48,13 @@ fun OnBoarding(navController: NavHostController) {
         .background(onb))
     {
         TopSection(
-            onBackClick = {
-                if (pageState.currentPage + 1 > 1) scope.launch {
-                    pageState.scrollToPage(pageState.currentPage - 1)
-                }
-            },
+//            onBackClick = {
+//                if (pageState.currentPage + 1 > 1) scope.launch {
+//                    pageState.scrollToPage(pageState.currentPage - 1)
+//                }
+//            },
             onSkipClick = {
-                navController.navigate(Screen.Home.route)
+                navController.navigate(Screen.AppView.route)
             }
         )
 
@@ -90,7 +90,7 @@ fun GS(navController: NavHostController) {
         contentAlignment = Alignment.BottomCenter
     ) {
         Button(
-            onClick = { navController.navigate(Screen.Home.route) },
+            onClick = { navController.navigate(Screen.AppView.route) },
             modifier = Modifier.padding(16.dp)
         ) {
             Text("Get Started")
@@ -106,10 +106,10 @@ fun TopSection(onBackClick: () -> Unit = {}, onSkipClick: () -> Unit = {}) {
             .fillMaxWidth()
             .padding(17.dp)
     ) {
-        // Back button
-        IconButton(onClick = onBackClick, modifier = Modifier.align(Alignment.CenterStart)) {
-            Icon(imageVector = Icons.Outlined.KeyboardArrowLeft, contentDescription = null)
-        }
+//        // Back button
+//        IconButton(onClick = onBackClick, modifier = Modifier.align(Alignment.CenterStart)) {
+//            Icon(imageVector = Icons.Outlined.KeyboardArrowLeft, contentDescription = null)
+//        }
 
         // Skip Button
         TextButton(
@@ -149,20 +149,24 @@ fun BottomSection(size: Int, index: Int, navController: NavHostController, funct
          ) {
              Icon(imageVector = Icons.Outlined.KeyboardArrowRight, contentDescription = "Next")
          }*/
+    }
+    Spacer(modifier = Modifier.height(20.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ){
         Button(
             onClick = {
-                navController.navigate(Screen.Home.route)
+                navController.navigate(Screen.AppView.route)
             },
             modifier = Modifier
-                .padding(end = 15.dp)
-                .align(Alignment.CenterEnd)
                 .clip(RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp))
+
         ) {
-            Icon(Icons.Outlined.KeyboardArrowRight,
-                tint = Color.White,
-                contentDescription = "Localized description")
+            Text(text = "Log In")
         }
     }
+
 }
 
 @Composable
@@ -227,7 +231,7 @@ fun OnBoardingItem(items: OnboardingItems.OnBoardingItems) {
         ) {
             Text(
                 text = stringResource(id = items.title),
-                style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Bold),
                 // fontSize = 24.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
@@ -241,7 +245,7 @@ fun OnBoardingItem(items: OnboardingItems.OnBoardingItems) {
 
             Text(
                 text = stringResource(id = items.desc),
-                style = MaterialTheme.typography.bodyLarge,
+                style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Normal),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Center,

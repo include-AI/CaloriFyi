@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.example.calorifyi.ml.FruitModelV1Optimize
 import com.example.calorifyi.ml.FruitModelV2Optimize
+import com.example.calorifyi.ml.FruitModelV32Optimize
 import com.example.calorifyi.ml.FruitModelV3Optimize
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
@@ -16,7 +17,7 @@ object TensorFlowHelper {
 
     @Composable
     fun classifyImage(image: Bitmap? = null, callback : (@Composable (fruit : String) -> Unit)){
-        val model = FruitModelV3Optimize.newInstance(LocalContext.current)
+        val model = FruitModelV32Optimize.newInstance(LocalContext.current)
 
 // Creates inputs for reference.
         val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, 224, 224, 3), DataType.FLOAT32)
@@ -57,18 +58,26 @@ object TensorFlowHelper {
             "Apple",
             "Banana",
             "Carambola",
+            "Carrot",
+            "Cucumber",
+            "Grape",
             "Guava",
             "Kiwi",
             "Mango",
+            "Muskmelon",
             "Orange",
+            "Papaya",
             "Peach",
-            "Pear",
+            "Pepper Green",
             "Persimmon",
+            "Pineapple",
             "Pitaya",
             "Plum",
             "Pomegranate",
-            "Tomatoes",
-            "Muskmelon"
+            "Strawberry",
+            "Sweet Lemon",
+            "Tomato",
+            "Watermelon"
         )
         callback.invoke(classes[maxPos])
 // Releases model resources if no longer used.

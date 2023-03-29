@@ -8,10 +8,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.calorifyi.Navigation.BottomNavigationItems
+import com.example.calorifyi.Navigation.BottomNavigation_
 import com.example.calorifyi.Navigation.Screen
 import com.example.calorifyi.ui.theme.splashcolor
 

@@ -27,6 +27,21 @@
         android:theme="@style/Theme.CaloriFyi"
         tools:targetApi="31">
         <activity
+            android:name=".DietActivity"
+            android:exported="false"
+            android:label="@string/title_activity_diet"
+            android:theme="@style/Theme.CaloriFyi" />
+        <activity
+            android:name=".AnalysisActivity"
+            android:exported="false"
+            android:label="@string/title_activity_analysis"
+            android:theme="@style/Theme.CaloriFyi" />
+        <activity
+            android:name=".ProgressActivity"
+            android:exported="false"
+            android:label="@string/title_activity_progress"
+            android:theme="@style/Theme.CaloriFyi" />
+        <activity
             android:name=".CameraActivity"
             android:exported="false"
             android:label="@string/title_activity_camera"

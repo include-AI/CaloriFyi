@@ -4,15 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.runtime.*
@@ -25,7 +23,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,10 +38,37 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.Navigation
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.calorifyi.Navigation.BottomNavigationItems
+import com.example.calorifyi.Navigation.BottomNavigation_
 import com.example.calorifyi.ui.theme.*
 
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+
+@Composable
+fun CaloriFyiApp(){
+    val navController = rememberNavController()
+    val items = listOf(
+        BottomNavigationItems.Home,
+        BottomNavigationItems.Progress,
+        BottomNavigationItems.Analysis,
+        BottomNavigationItems.Diet
+    )
+    Scaffold(
+        bottomBar = { BottomMenu(navController, items = items) },
+        content = { padding ->
+            Box(modifier = Modifier.padding(padding)){
+                BottomNavigation_(navController = navController)
+            }
+        }
+    )
+}
+
 @Composable
 fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
     val scaffoldState = rememberScaffoldState()
@@ -53,6 +77,7 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
         mutableStateOf(TextFieldValue())
     }
     val camContext = LocalContext.current
+
 
     Column {
         Scaffold(
@@ -133,6 +158,7 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
                     }
                 }
             },
+
             content = {
                 LazyColumn(
                     modifier = Modifier
@@ -197,18 +223,13 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
 //                                }
                             }
                         }
-                        Spacer(modifier = Modifier.height(214.dp))
-                        BottomMenu(items = listOf(
-                            BottomMenuContent("Home", R.drawable.home),
-                            BottomMenuContent("Progress", R.drawable.progress),
-                            BottomMenuContent("Analysis", R.drawable.analysis),
-                            BottomMenuContent("Diet", R.drawable.diet)))
+
+
 
                     }
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
-1
                     FloatingActionButton(
                         modifier = Modifier
                             .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 150.dp)
@@ -221,12 +242,18 @@ fun HomeScreen(currentCalorie: Int = 1500, limitingCalorie: Int = 3000){
                             contentDescription = "Camera")
                     }
                 }
-
+                
+                
+                
             }
         )
     }
 
+
+
 }
+
+
 
 
 
@@ -249,15 +276,41 @@ fun SideDrawer(){
             )
             Spacer(modifier = Modifier.height(40.dp))
 
-//            LazyColumn{
-//                item {
-//                    DrawerItem(title = "Calories in Gallery", onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) })
-////                    DrawerItem(title = "Test 1", onClick = {})
-////                    DrawerItem(title = "Test 2", onClick = {})
-////                    DrawerItem(title = "Test 3", onClick = {})
-//                }
-//            }
+            LazyColumn{
+                item {
+                    DrawerItem(title = "Calories in Gallery", onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) })
+//                    DrawerItem(title = "Test 1", onClick = {})
+//                    DrawerItem(title = "Test 2", onClick = {})
+//                    DrawerItem(title = "Test 3", onClick = {})
+                }
+            }
 
+        }
+
+    }
+}
+
+@Composable
+fun DrawerItem(
+    title: String,
+    onClick: ()->Unit,
+){
+    Card(
+        elevation = 4.dp,
+        modifier = Modifier.fillMaxWidth(),
+        border = BorderStroke(1.dp, color = BGPurple),
+        backgroundColor = BGPurple
+    ){
+        OutlinedButton(
+            colors = ButtonDefaults.buttonColors(backgroundColor = BGPurple),
+            border = BorderStroke(0.5.dp, Purple200),
+            onClick = onClick,
+//            modifier = Modifier.padding(5.dp)
+        ) {
+            Text(
+                text = title,
+                fontFamily = googleSans
+            )
         }
 
     }
@@ -338,46 +391,87 @@ fun MacrosList(name: String){
 
 @Composable
 fun BottomMenu(
-    items: List<BottomMenuContent>,
-    modifier: Modifier = Modifier,
-    activeHighLightColor: Color = colorResource(id = R.color.bgpurple),
-    activeTextColor: Color = Color.Black,
-    inactiveTextColor: Color = Color.Black,
-    initialSelectedItemIndex: Int = 0)
+    navController: NavController,
+    items: List<BottomNavigationItems>
+)
 {
-    var selectedItemIndex by remember {
-        mutableStateOf(initialSelectedItemIndex)
-    }
-    Row(
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(colorResource(id = R.color.usepurple))
-            .padding(15.dp)
-            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+
+//    val items = listOf(
+//        BottomNavigationItems.Home,
+//        BottomNavigationItems.Progress,
+//        BottomNavigationItems.Analysis,
+//        BottomNavigationItems.Diet
+//    )
+    BottomNavigation(
+        modifier = Modifier
+            .background(UsePurple)
+            .height(65.dp),
+        elevation = 2.dp,
+        backgroundColor = UsePurple,
+        contentColor = White
     ) {
-        items.forEachIndexed {index, item ->
-            BottomMenuItem(
-                item = item,
-                isSelected = index == selectedItemIndex,
-                activeHighLightColor = activeHighLightColor,
-                activeTextColor=activeTextColor,
-                inactiveTextColor = inactiveTextColor){
-                selectedItemIndex = index
-        }
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+        items.forEach {item ->
+            BottomNavigationItem(
+                icon = {
+                       Icon(
+                           painter = painterResource(id = item.icon),
+                           modifier = Modifier.size(25.dp),
+                           contentDescription = "icon")
+                },
+                label = { Text(
+                    text = item.title,
+                    color = White,
+                    fontFamily = googleSans,
+                )},
+                selectedContentColor = Black,
+                unselectedContentColor = White,
+                alwaysShowLabel = true,
+                selected = currentRoute == item.route,
+                onClick = {
+                    navController.navigate(item.route){
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            )
+//            BottomMenuItem(
+//                item = item,
+//                isSelected = index == selectedItemIndex,
+//                activeHighLightColor = activeHighLightColor,
+//                activeTextColor=activeTextColor,
+//                inactiveTextColor = inactiveTextColor,
+//                onItemClick = {
+//                    navController.navigate(item.route){
+//                        navController.graph.startDestinationRoute?.let { route ->
+//                            popUpTo(route) {
+//                                saveState = true
+//                            }
+//                        }
+//                        launchSingleTop = true
+//                        restoreState = true
+//                    }
+//                }
+//            )
         }
     }
 }
 
 @Composable
 fun BottomMenuItem(
-    item: BottomMenuContent,
+    item: BottomNavigationItems,
     isSelected: Boolean = false,
-    activeHighLightColor: Color = Color.Black,
+    activeHighLightColor: Color = Black,
     inactiveTextColor: Color = Black,
-    activeTextColor: Color = Color.Black,
-    onItemClick: () -> Unit)
+    activeTextColor: Color = Black,
+    onItemClick: () -> Unit,
+)
 {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -395,7 +489,7 @@ fun BottomMenuItem(
             .padding(10.dp)
     ){
         Icon(
-            painter = painterResource(id = item.iconId),
+            painter = painterResource(id = item.icon),
             contentDescription = item.title,
             tint = if(isSelected) activeTextColor else inactiveTextColor,
             modifier = Modifier.size(15.dp)
@@ -413,8 +507,7 @@ fun BottomMenuItem(
 @Composable
 fun SideDrawerPreview(){
     CaloriFyiTheme {
-        BottomMenu(items =  listOf(
-            BottomMenuContent(title = "Home", R.drawable.ic_nhome_foreground)
-        ))
+        HomeScreen()
     }
+
 }
