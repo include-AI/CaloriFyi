@@ -33,4 +33,4 @@ This project is in development phase, so it is going to be in constant updation.
 
 
           
-Made with ❤️ by CaloriFYI Team
+Made with ❤️ by The CaloriFYI Team
