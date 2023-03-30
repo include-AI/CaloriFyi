@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -263,7 +264,9 @@ fun SideDrawer(){
     Column(
         modifier = Modifier
             .background(BGPurple)
-            .fillMaxSize()
+            .padding(start = 8.dp, top = 32.dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column() {
             Text(
@@ -276,12 +279,20 @@ fun SideDrawer(){
             )
             Spacer(modifier = Modifier.height(40.dp))
 
-            LazyColumn{
+            LazyColumn {
                 item {
-                    DrawerItem(title = "Calories in Gallery", onClick = { cam2Context.startActivity(Intent(cam2Context, PredictionActivity::class.java)) })
-//                    DrawerItem(title = "Test 1", onClick = {})
-//                    DrawerItem(title = "Test 2", onClick = {})
-//                    DrawerItem(title = "Test 3", onClick = {})
+                    DrawerItem(
+                        title = "Calories in Gallery",
+                        onClick = {
+                            cam2Context.startActivity(
+                                Intent(
+                                    cam2Context,
+                                    PredictionActivity::class.java
+                                )
+                            )
+                        })
+                    DrawerItem(title = "About Us", onClick = {})
+                    DrawerItem(title = "Version Details", onClick = {})
                 }
             }
 
@@ -290,26 +301,44 @@ fun SideDrawer(){
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DrawerItem(
     title: String,
     onClick: ()->Unit,
 ){
     Card(
-        elevation = 4.dp,
-        modifier = Modifier.fillMaxWidth(),
-        border = BorderStroke(1.dp, color = BGPurple),
-        backgroundColor = BGPurple
-    ){
-        OutlinedButton(
-            colors = ButtonDefaults.buttonColors(backgroundColor = BGPurple),
-            border = BorderStroke(0.5.dp, Purple200),
-            onClick = onClick,
-//            modifier = Modifier.padding(5.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        backgroundColor = Purple200,
+        elevation = 0.dp,
+        onClick = onClick,
+        shape = RoundedCornerShape(12.dp)
+    ) {
+//        OutlinedButton(
+//            colors = ButtonDefaults.buttonColors(backgroundColor = BGPurple),
+//            border = BorderStroke(0.5.dp, Purple200),
+//            onClick = onClick,
+////            modifier = Modifier.padding(5.dp)
+//        ) {
+//            Text(
+//                text = title,
+//                fontFamily = googleSans
+//            )
+//        }
+
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start,
         ) {
+
             Text(
+                modifier = Modifier
+                    .padding(start = 24.dp),
                 text = title,
-                fontFamily = googleSans
             )
         }
 
@@ -507,7 +536,7 @@ fun BottomMenuItem(
 @Composable
 fun SideDrawerPreview(){
     CaloriFyiTheme {
-        HomeScreen()
+        SideDrawer()
     }
 
 }

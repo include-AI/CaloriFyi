@@ -12,18 +12,22 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.calorifyi.TensorFlowHelper.imageSize
-import com.example.calorifyi.ui.theme.CaloriFyiTheme
+import com.example.calorifyi.ui.theme.*
 
 
 class PredictionActivity : ComponentActivity() {
@@ -119,9 +123,11 @@ fun PredictView() {
     
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(onb),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
 
             photoUri?.let {
@@ -147,15 +153,27 @@ fun PredictView() {
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 val scaledBitmap = Bitmap.createScaledBitmap(it, imageSize, imageSize, false);
+
                 TensorFlowHelper.classifyImage(scaledBitmap) {
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
+                        var reception by remember(it) {
+                            mutableStateOf(emptyList<Reception>())
+                        }
+                        LaunchedEffect(it) {
+                            val newReception = recep(it)
+                            reception = newReception
+                        }
 
-                        Text(text = "Image is classified as:")
-                        Text(text = it, color = Color.Black, fontSize = 24.sp)
+//                        Text(text = "Image is classified as:", fontFamily = googleSans)
+                        Text(text = it, color = Color.Black, fontSize = 24.sp, fontFamily = googleSans)
+                        reception.forEach { item ->
+                            Text("\n\nPer ${item.quantity} gm \n\nCalories: ${item.calories}", fontFamily = googleSans, textAlign = TextAlign.Start)
+                        }
                     }
                 }
             }
@@ -165,9 +183,14 @@ fun PredictView() {
             Button(onClick = { 
                 galleryLauncher.launch("image/*")
             },
-                modifier = Modifier.wrapContentSize()
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.wrapContentSize(),
+                colors = ButtonDefaults.buttonColors(Purple200)
                 ) {
-                Text(text = "Select an Image")
+                Text(
+                    text = "Select an Image",
+                    fontFamily = googleSans
+                )
             }
             
         }

@@ -13,7 +13,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +28,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import coil.compose.rememberImagePainter
 import com.example.calorifyi.ui.theme.CaloriFyiTheme
+import com.example.calorifyi.ui.theme.Purple200
+import com.example.calorifyi.ui.theme.googleSans
+import com.example.calorifyi.ui.theme.onb
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -64,11 +69,6 @@ class CameraActivity : ComponentActivity() {
                     }
 
                     if (shouldShowPhoto.value) {
-                        Image(
-                            painter = rememberImagePainter(photoUri),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize()
-                        )
                         var imgBitmap: Bitmap? = null
                         //val file: File = File(Environment.getExternalStorageDirectory(), "read.me")
                         val uri = photoUri
@@ -77,34 +77,58 @@ class CameraActivity : ComponentActivity() {
                             TensorFlowHelper.imageSize,
                             TensorFlowHelper.imageSize, false) }
 
-                        Box(
-                            modifier = Modifier.fillMaxSize()
-                        ) {
-
-                            TensorFlowHelper.classifyImage(scaledBitmap) {
-                                Column(
-                                    modifier = Modifier.fillMaxSize(),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-
-
-                                    Text(text = "Image is classified as:")
-                                    Text(text = it, color = Color.White, fontSize = 24.sp)
-                                    val modelOutput = it
-                                    Spacer(modifier = Modifier.height(10.dp))
-                                    context = LocalContext.current
-                                    Button(onClick = {
-                                        val i = Intent(context, ReceptionActivity::class.java)
-                                        i.putExtra("query_image", modelOutput)
-                                        i.data = photoUri
-                                        context.startActivity(i)
-                                    }) {
-
+                        TensorFlowHelper.classifyImage(scaledBitmap) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(onb),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                Image(
+                                    painter = rememberImagePainter(photoUri),
+                                    contentDescription = null,
+                                    modifier = Modifier.wrapContentHeight()
+                                )
+                                Spacer(modifier = Modifier.height(20.dp))
+//                                Text(text = "Image is classified as:")
+                                Text(text = it, color = Color.Black, fontSize = 24.sp, fontFamily = googleSans)
+                                val modelOutput = it
+                                Spacer(modifier = Modifier.height(5.dp))
+                                context = LocalContext.current
+                                Row(
+                                    modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+                                ){
+                                    Button(
+                                        onClick = {
+                                            val i = Intent(context, ReceptionActivity::class.java)
+                                            i.putExtra("query_image", modelOutput)
+                                            i.data = photoUri
+                                            context.startActivity(i)
+                                        },
+                                        shape = RoundedCornerShape(12.dp),
+                                        colors = ButtonDefaults.buttonColors(Purple200),
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Text(text = "Process", fontFamily = googleSans)
                                     }
+                                    Spacer(modifier = Modifier.padding(10.dp))
+                                    Button(
+                                        onClick = {},
+                                        shape = RoundedCornerShape(12.dp),
+                                        colors = ButtonDefaults.buttonColors(Purple200),
+                                        modifier = Modifier.weight(1f)
+                                    ){
+                                        Text(text = "Add to Diet", fontFamily = googleSans)
+                                    }
+
                                 }
+
+
+
                             }
                         }
+
                     }
                 }
             }
