@@ -2,7 +2,6 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement.Top
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,12 +11,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -32,6 +33,7 @@ import com.example.calorifyi.Navigation.BottomMenuContent
 import com.example.calorifyi.Navigation.Screen
 import com.example.calorifyi.R
 import com.example.calorifyi.ui.theme.CaloriFyiTheme
+import com.example.calorifyi.ui.theme.googleSans
 import com.example.calorifyi.ui.theme.onb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,20 +49,20 @@ fun SignUp( navController: NavController ) {
             .fillMaxSize()
             .background(onb)
     ) {
-        ClickableText(
-            text = AnnotatedString("Already registered? LogIn"),
-            onClick = {
-                navController.navigate(Screen.LogIn.route)
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(20.dp),
-            style = TextStyle(
-                fontSize = 18.sp,
-                textDecoration = TextDecoration.Underline,
-                color = colorResource(id = R.color.usepurple)
-            )
-        )
+//        ClickableText(
+//            text = AnnotatedString("Already registered? LogIn"),
+//            onClick = {
+//                navController.navigate(Screen.LogIn.route)
+//            },
+//            modifier = Modifier
+//                .align(Alignment.BottomCenter)
+//                .padding(20.dp),
+//            style = TextStyle(
+//                fontSize = 18.sp,
+//                textDecoration = TextDecoration.Underline,
+//                color = colorResource(id = R.color.usepurple)
+//            )
+//        )
     }
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -69,13 +71,15 @@ fun SignUp( navController: NavController ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-                .padding(top=20.dp)
+                .height(150.dp)
+                .padding(top = 10.dp)
         ){
             Image(
-                painter = painterResource(id = R.drawable.oip),
+                painter = painterResource(id = R.drawable.signup),
                 contentDescription = "Banner",
-                modifier = Modifier.fillMaxSize())
+                modifier = Modifier
+                    .fillMaxSize())
+
         }
         val context = LocalContext.current
         val isLoading = remember { mutableStateOf(false) }
@@ -88,7 +92,8 @@ fun SignUp( navController: NavController ) {
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Text(text = "Signup", style = TextStyle(fontSize = 35.sp))
+        Text(text = "1. General Information", style = TextStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold), fontFamily = googleSans, color = colorResource(
+            id = R.color.usepurple))
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -100,8 +105,10 @@ fun SignUp( navController: NavController ) {
                 value = firstName.value,
                 shape = RoundedCornerShape(50),
                 onValueChange = { firstName.value = it },
-                modifier = Modifier.weight(1f)
-                    .padding(start = 30.dp).height(60.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 30.dp)
+                    .height(60.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             OutlinedTextField(
@@ -110,11 +117,15 @@ fun SignUp( navController: NavController ) {
                 value = lastName.value,
                 shape = RoundedCornerShape(50),
                 onValueChange = { lastName.value = it },
-                modifier = Modifier.weight(1f)
-                    .padding(end = 30.dp).height(60.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 30.dp)
+                    .height(60.dp)
             )
         }
-        Column(modifier = Modifier.fillMaxWidth().padding(start = 30.dp)){
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 30.dp)){
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -124,7 +135,10 @@ fun SignUp( navController: NavController ) {
                 value = username.value,
                 shape = RoundedCornerShape(50),
                 onValueChange = {username.value = it},
-                modifier = Modifier.fillMaxWidth().padding(end = 30.dp).height(60.dp))
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 30.dp)
+                    .height(60.dp))
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -134,7 +148,9 @@ fun SignUp( navController: NavController ) {
                 value = email.value,
                 onValueChange = {email.value = it},
                 shape = RoundedCornerShape(50),
-                modifier = Modifier.fillMaxWidth().padding(end = 30.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 30.dp)
                     .height(60.dp))
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -147,7 +163,9 @@ fun SignUp( navController: NavController ) {
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 onValueChange = {password.value = it},
-                modifier = Modifier.fillMaxWidth().padding(end = 30.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 30.dp)
                     .height(60.dp)
             )
         }
@@ -214,7 +232,7 @@ fun SignUp( navController: NavController ) {
                     CircularProgressIndicator(color = Color.White)
                 }
                 else{}
-                Text(text = "Sign Up", color = Color.White)
+                Text(text = "Sign Up", color = Color.White, fontFamily = googleSans)
             }
         }
         Spacer(modifier = Modifier.height(40.dp))

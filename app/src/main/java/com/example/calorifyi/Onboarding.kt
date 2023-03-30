@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,6 @@ fun OnBoarding(navController: NavHostController) {
     val items = OnboardingItems.OnBoardingItems.getData()
     val scope = rememberCoroutineScope()
     val pageState = rememberPagerState()
-    var shouldshowGS by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -163,7 +163,7 @@ fun BottomSection(size: Int, index: Int, navController: NavHostController, funct
                 .clip(RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp))
 
         ) {
-            Text(text = "Log In")
+            Text(text = "Log In", fontFamily = googleSans)
         }
     }
 

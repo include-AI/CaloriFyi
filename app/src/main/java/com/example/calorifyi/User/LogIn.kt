@@ -31,6 +31,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.calorifyi.Navigation.Screen
 import com.example.calorifyi.R
+import com.example.calorifyi.ui.theme.googleSans
 
 import com.example.calorifyi.ui.theme.onb
 import kotlinx.coroutines.CoroutineScope
@@ -59,6 +60,7 @@ fun LogIn(navController: NavHostController) {
                 .align(Alignment.BottomCenter)
                 .padding(20.dp),
             style = TextStyle(
+                fontFamily = googleSans,
                 fontSize = 18.sp,
                 textDecoration = TextDecoration.Underline,
                 color = colorResource(id = R.color.usepurple)
@@ -75,7 +77,7 @@ fun LogIn(navController: NavHostController) {
         val username = remember { mutableStateOf(TextFieldValue()) }
         val password = remember { mutableStateOf(TextFieldValue()) }
 
-        Text(text = "Login", style = TextStyle(fontSize = 40.sp))
+        Text(text = "Login", style = TextStyle(fontFamily = googleSans, fontSize = 40.sp))
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -162,7 +164,7 @@ fun LogIn(navController: NavHostController) {
                 if (isLoading.value) { // If the flag is true, show the progress indicator
                     CircularProgressIndicator(color = Color.White)}
                 else{}
-                Text(text = "Login", color = Color.White)
+                Text(text = "Login", color = Color.White, fontFamily = googleSans)
             }
         }
         Spacer(modifier = Modifier.height(40.dp))
@@ -170,6 +172,7 @@ fun LogIn(navController: NavHostController) {
             text = AnnotatedString("Forgot password?"),
             onClick = { },
             style = TextStyle(
+                fontFamily = googleSans,
                 fontSize = 14.sp
             )
         )

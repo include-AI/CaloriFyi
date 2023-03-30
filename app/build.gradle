@@ -110,4 +110,5 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.0.0")
 
 //    implementation "javax.security.sasl:sasl-api:1.0.1"
+    implementation "androidx.compose.foundation:foundation:1.0.0-alpha08"
 }
