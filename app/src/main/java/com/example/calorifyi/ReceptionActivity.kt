@@ -54,101 +54,102 @@ class ReceptionActivity: ComponentActivity() {
     }
 
     //this is the main thread
-    @Composable
-    fun CalorieDisplay(modelOutput: String?, foodImage: Uri?) {
-        var reception by remember(modelOutput) {
-            mutableStateOf(emptyList<Reception>())
-        }
-        var context: Context
+}
+@Composable
+fun CalorieDisplay(modelOutput: String?, foodImage: Uri?) {
+    var reception by remember(modelOutput) {
+        mutableStateOf(emptyList<Reception>())
+    }
+    var context: Context
 
-        //async task
-        LaunchedEffect(modelOutput) {
-            val newReception = recep(modelOutput)
-            reception = newReception
-        }
-        //displaying
-        Column(
+    //async task
+    LaunchedEffect(modelOutput) {
+        val newReception = recep(modelOutput)
+        reception = newReception
+    }
+    //displaying
+    Column(
 //            horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(onb)
+    ) {
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .background(onb)
+                .fillMaxWidth()
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.align(
+                    Alignment.Center
+                )
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.align(
-                        Alignment.Center
-                    )
-                ) {
-                    Image(
-                        painter = rememberImagePainter(data = foodImage),
-                        contentDescription = "foodImage",
-                        modifier = Modifier
-                            .size(250.dp)
-                            .padding(top = 20.dp),
-                    )
-                    Text(text = "$modelOutput")
-                    Spacer(modifier = Modifier.height(20.dp))
-                    context = LocalContext.current
-                    Button(
-                        modifier = Modifier.size(height = 40.dp, width = 160.dp),
-                        onClick = {
-                            val intent = Intent(context, CameraActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            context.startActivity(intent)
-                            (context as Activity).finish()
-                        }
+                Image(
+                    painter = rememberImagePainter(data = foodImage),
+                    contentDescription = "foodImage",
+                    modifier = Modifier
+                        .size(250.dp)
+                        .padding(top = 20.dp),
+                )
+                Text(text = "$modelOutput")
+                Spacer(modifier = Modifier.height(20.dp))
+                context = LocalContext.current
+                Button(
+                    modifier = Modifier.size(height = 40.dp, width = 160.dp),
+                    onClick = {
+                        val intent = Intent(context, CameraActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(intent)
+                        (context as Activity).finish()
+                    }
 //
 //                            context.startActivity(Intent(context, CameraActivity::class.java))
 //                        finish()}
-                    ) {
-                        Text(text = "Retake Image", color = Color.White, fontFamily = googleSans)
-                    }
+                ) {
+                    Text(text = "Retake Image", color = Color.White, fontFamily = googleSans)
                 }
             }
-//            DisplayReception(reception)
-            DisplayTable(reception)
         }
+//            DisplayReception(reception)
+        DisplayTable(reception)
     }
+}
 
 //making connection
 
-    suspend fun recep(modelOutput: String?) = withContext(Dispatchers.IO) {
-        val host = "SQL8002.site4now.net"
-        val port = "1433"
-        val database = "db_a963e4_quantunfcc"
-        val username = "db_a963e4_quantunfcc_admin"
-        val password = "Pratyushkr.123@"
-        val url = "jdbc:jtds:sqlserver://$host:$port/$database"
-        val connection = DriverManager
-            .getConnection(url, username, password)
+suspend fun recep(modelOutput: String?) = withContext(Dispatchers.IO) {
+    val host = "SQL8002.site4now.net"
+    val port = "1433"
+    val database = "db_a963e4_quantunfcc"
+    val username = "db_a963e4_quantunfcc_admin"
+    val password = "Pratyushkr.123@"
+    val url = "jdbc:jtds:sqlserver://$host:$port/$database"
+    val connection = DriverManager
+        .getConnection(url, username, password)
 
-        // the query is only prepared not executed
-        val query =
-            connection.prepareStatement("SELECT Quantity, Calories, Proteins, Fats, Carbs FROM test WHERE Name_of_Food = '$modelOutput'")
-        // the query is executed and results are fetched
-        val result = query.executeQuery()
-        // an empty list for holding the results
-        val reception = mutableListOf<Reception>()
+    // the query is only prepared not executed
+    val query =
+        connection.prepareStatement("SELECT Quantity, Calories, Proteins, Fats, Carbs FROM test WHERE Name_of_Food = '$modelOutput'")
+    // the query is executed and results are fetched
+    val result = query.executeQuery()
+    // an empty list for holding the results
+    val reception = mutableListOf<Reception>()
 
-        while (result.next()) {
-            val quantity = result.getInt("Quantity")
-            val calories = result.getInt("Calories")
-            val proteins = result.getFloat("Proteins")
-            val fats = result.getFloat("Fats")
-            val carbs = result.getFloat("Carbs")
+    while (result.next()) {
+        val quantity = result.getInt("Quantity")
+        val calories = result.getInt("Calories")
+        val proteins = result.getFloat("Proteins")
+        val fats = result.getFloat("Fats")
+        val carbs = result.getFloat("Carbs")
 //            val foodDesc = result.getString("Food_Desc")
-            reception.add(Reception(quantity, calories, proteins, fats, carbs))
-        }
-        return@withContext reception
+        reception.add(Reception(quantity, calories, proteins, fats, carbs))
     }
+    return@withContext reception
+}
 
-    @Composable
-    fun DisplayTable(reception: List<Reception>){
-        reception.forEach { item ->
+@Composable
+fun DisplayTable(reception: List<Reception>){
+    reception.forEach { item ->
         val tableData = listOf(
             Pair("Quantity: ", "${item.quantity} gm"),
             Pair("Calories: ", "${item.calories} kcal"),
@@ -185,8 +186,6 @@ class ReceptionActivity: ComponentActivity() {
         }
     }
 }
-}
-
 //    @Composable
 //    fun DisplayReception(reception: List<Reception>) {
 //        reception.forEach { item ->
