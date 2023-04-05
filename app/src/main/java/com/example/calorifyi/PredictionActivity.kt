@@ -10,13 +10,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,8 +30,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.calorifyi.TensorFlowHelper.imageSize
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.calorifyi.Navigation.Screen
 import com.example.calorifyi.ui.theme.*
+import org.tensorflow.lite.task.vision.detector.Detection
+import java.io.File
+import java.io.FileOutputStream
+
 
 
 class PredictionActivity : ComponentActivity() {
@@ -103,8 +113,22 @@ class PredictionActivity : ComponentActivity() {
   //  }
 //}
 
+@Composable
+fun ScrollableColumn(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    BoxWithConstraints(modifier = modifier) {
+        val scrollState = rememberScrollState()
+        Column(modifier = Modifier.verticalScroll(scrollState)) {
+            content()
+        }
+    }
+}
 
-@OptIn(ExperimentalFoundationApi::class)
+
+
+
 @Composable
 fun PredictView() {
     val cam3ctx = LocalContext.current
@@ -120,8 +144,14 @@ fun PredictView() {
             photoUri = it
         }
     )
-    
-    Scaffold(modifier = Modifier.fillMaxSize()) {
+
+    val scrollState = rememberScrollState()
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -144,17 +174,34 @@ fun PredictView() {
                 }
             }
 
+
             bitmap?.let {
-                Image(
-                    bitmap = it.asImageBitmap(),
-                    contentDescription = "Image from the gallery",
-                    Modifier.size(400.dp)
-                )
-                Spacer(modifier = Modifier.padding(20.dp))
+//                Image(
+//                    bitmap = it.asImageBitmap(),
+//                    contentDescription = "Image from the gallery",
+//                    Modifier.size(400.dp)
+//                )
+//                Spacer(modifier = Modifier.padding(20.dp))
 
-                val scaledBitmap = Bitmap.createScaledBitmap(it, imageSize, imageSize, false);
+//                val context = LocalContext.current
+//                val path = context.getExternalFilesDir(null)!!.absolutePath
+//
+//                val image = it
+//                val tempFile = File(path, "tempFile.jpg")
+//                val fOut = FileOutputStream(tempFile)
+//                image.compress(Bitmap.CompressFormat.JPEG, 100, fOut)
+//
+//                Button(onClick = {
+//                    navController.navigate(Screen.MakePrediction.route)
+//                },
+//                    shape = RoundedCornerShape(12.dp),
+//                    modifier = Modifier.wrapContentSize(),
+//                    colors = ButtonDefaults.buttonColors(Purple200)) {
+//                    Text(text = "Process", fontFamily = googleSans)
+//                }
 
-                TensorFlowHelper.classifyImage(scaledBitmap) {
+
+                ObjectDetectionHelper.ObjectDetect(bitmap = it) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -170,32 +217,105 @@ fun PredictView() {
                         }
 
 //                        Text(text = "Image is classified as:", fontFamily = googleSans)
-                        Text(text = it, color = Color.Black, fontSize = 24.sp, fontFamily = googleSans)
+
+                        Text(
+                            text = it,
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontFamily = googleSans
+                        )
                         reception.forEach { item ->
-                            Text("\n\nPer ${item.quantity} gm \n\nCalories: ${item.calories}", fontFamily = googleSans, textAlign = TextAlign.Start)
+                            val tableData = listOf(
+                                Pair("Quantity: ", "${item.quantity} gm"),
+                                Pair("Calories: ", "${item.calories} kcal"),
+                                Pair("Fats: ", "${item.fats} gm"),
+                                Pair("Carbs: ", "${item.carbs} gm"),
+                                Pair("Proteins: ", "${item.proteins} gm")
+                            )
+                            Spacer(modifier = Modifier.height(25.dp))
+
+                            LazyColumn{
+                                items(tableData.size) { index ->
+                                    val rowData = tableData[index]
+
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 8.dp)
+                                            .padding(start = 20.dp, end = 20.dp),
+                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    ) {
+                                        Text(
+                                            text = rowData.first,
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .padding(start = 16.dp)
+                                        )
+                                        Text(
+                                            text = rowData.second,
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .padding(end = 16.dp),
+                                            textAlign = TextAlign.End
+                                        )
+                                    }
+
+
+                                }
+                            }
+
                         }
+
+
+
                     }
+
                 }
+//                TensorFlowHelper.classifyImage(scaledBitmap) {
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxWidth(),
+//                        verticalArrangement = Arrangement.Center,
+//                        horizontalAlignment = Alignment.CenterHorizontally,
+//                    ) {
+//                        var reception by remember(it) {
+//                            mutableStateOf(emptyList<Reception>())
+//                        }
+//                        LaunchedEffect(it) {
+//                            val newReception = recep(it)
+//                            reception = newReception
+//                        }
+//
+////                        Text(text = "Image is classified as:", fontFamily = googleSans)
+//                        Text(text = it, color = Color.Black, fontSize = 24.sp, fontFamily = googleSans)
+//                        reception.forEach { item ->
+//                            Text("\n\nPer ${item.quantity} gm \n\nCalories: ${item.calories}", fontFamily = googleSans, textAlign = TextAlign.Start)
+//                        }
+//                    }
+
             }
-            
             Spacer(modifier = Modifier.padding(25.dp))
-            
-            Button(onClick = { 
-                galleryLauncher.launch("image/*")
-            },
+
+
+
+
+            Button(
+                onClick = {
+                    galleryLauncher.launch("image/*")
+                },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.wrapContentSize(),
                 colors = ButtonDefaults.buttonColors(Purple200)
-                ) {
+            ) {
                 Text(
                     text = "Select an Image",
                     fontFamily = googleSans
                 )
             }
-            
         }
     }
 }
+
 
 
 //fun getPredictions(byteBuffer: ByteBuffer){
