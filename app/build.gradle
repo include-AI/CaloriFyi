@@ -88,6 +88,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
 
+
     // lottie
     implementation 'com.airbnb.android:lottie-compose:5.2.0'
 

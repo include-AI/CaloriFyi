@@ -9,10 +9,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,7 +51,7 @@ fun LogIn(navController: NavHostController) {
         ClickableText(
             text = AnnotatedString("Click here to Sign Up"),
             onClick = {
-                navController.navigate(Screen.SignUp.route)
+                navController.navigate(Screen.SignUpPersonal.route)
             },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -76,6 +73,7 @@ fun LogIn(navController: NavHostController) {
         val isLoading = remember { mutableStateOf(false) }
         val username = remember { mutableStateOf(TextFieldValue()) }
         val password = remember { mutableStateOf(TextFieldValue()) }
+        var rememberMe by remember { mutableStateOf(false) }
 
         Text(text = "Login", style = TextStyle(fontFamily = googleSans, fontSize = 40.sp))
 
@@ -87,7 +85,7 @@ fun LogIn(navController: NavHostController) {
             shape = RoundedCornerShape(50),
             onValueChange = {username.value = it})
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
         OutlinedTextField(
             label = {Text(text = "Password")},
@@ -167,6 +165,11 @@ fun LogIn(navController: NavHostController) {
                 Text(text = "Login", color = Color.White, fontFamily = googleSans)
             }
         }
+        Spacer(modifier = Modifier.height(20.dp))
+        RememberMeCheckbox(
+            rememberMe = rememberMe,
+            onCheckedChange = { rememberMe = it }
+        )
         Spacer(modifier = Modifier.height(40.dp))
         ClickableText(
             text = AnnotatedString("Forgot password?"),
@@ -175,6 +178,25 @@ fun LogIn(navController: NavHostController) {
                 fontFamily = googleSans,
                 fontSize = 14.sp
             )
+        )
+    }
+}
+
+@Composable
+fun RememberMeCheckbox(rememberMe: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+        .padding(start = 30.dp)
+    ) {
+        Checkbox(
+            checked = rememberMe,
+            onCheckedChange = onCheckedChange,
+//            modifier = Modifier.padding(end = 3.dp)
+        )
+        Text(
+            text = "Keep me logged in",
+            style = MaterialTheme.typography.body1
         )
     }
 }
