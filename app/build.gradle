@@ -40,17 +40,18 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion '1.1.1'
+        kotlinCompilerVersion '1.6.10'
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    aaptOptions {
-        noCompress "tflite"
+    androidResources {
+        noCompress 'tflite'
     }
 
-    configurations.all {
+    configurations.configureEach {
         resolutionStrategy {
             force "org.tensorflow:tensorflow-lite-support-api:0.3.1"
         }

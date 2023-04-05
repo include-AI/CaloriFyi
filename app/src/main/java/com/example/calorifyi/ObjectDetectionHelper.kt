@@ -1,6 +1,7 @@
 package com.example.calorifyi
 
 import android.graphics.*
+import android.media.Image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -19,6 +20,7 @@ import com.example.calorifyi.ui.theme.googleSans
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.vision.detector.Detection
 import org.tensorflow.lite.task.vision.detector.ObjectDetector
+import org.w3c.dom.Text
 
 object ObjectDetectionHelper{
 
@@ -33,7 +35,7 @@ object ObjectDetectionHelper{
             .build()
         val detector = ObjectDetector.createFromFileAndOptions(
             LocalContext.current,
-            "model.tflite",
+            "efdlite3_v0.3.tflite",
             options
         )
 
