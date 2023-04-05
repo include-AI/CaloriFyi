@@ -10,7 +10,9 @@ sealed class Screen(val route: String) {
     object CameraView : Screen("camera_view")
     object AppView : Screen("app_view")
     object LogIn : Screen("LogIn")
-    object SignUp : Screen("SignUp")
+    object SignUpPersonal : Screen("SignUpPersonal")
+    object SignUpUser : Screen("SignUpUser")
+    object SignUpAdditional : Screen("SignUpAdditional")
 }
 
 sealed class BottomNavigationItems(val route: String, var icon: Int, var title: String){
