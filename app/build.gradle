@@ -49,6 +49,13 @@ android {
     aaptOptions {
         noCompress "tflite"
     }
+
+    configurations.all {
+        resolutionStrategy {
+            force "org.tensorflow:tensorflow-lite-support-api:0.3.1"
+        }
+    }
+
 }
 
 dependencies {
@@ -59,13 +66,14 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
     implementation 'androidx.compose.material:material:1.1.1'
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha04"
-    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.3.1'
     implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
     implementation 'org.tensorflow:tensorflow-lite-gpu:2.3.0'
-    implementation 'org.tensorflow:tensorflow-lite:2.5.0'
+    implementation 'org.tensorflow:tensorflow-lite:2.7.0'
     implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
     implementation('org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly') { changing = true }
     implementation('org.tensorflow:tensorflow-lite-support:0.0.0-nightly') { changing = true }
+    implementation 'org.tensorflow:tensorflow-lite-task-vision:0.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -110,5 +118,5 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.0.0")
 
 //    implementation "javax.security.sasl:sasl-api:1.0.1"
-    implementation "androidx.compose.foundation:foundation:1.0.0-alpha08"
+    implementation "androidx.compose.foundation:foundation:1.1.0"
 }

@@ -11,6 +11,9 @@ sealed class Screen(val route: String) {
     object AppView : Screen("app_view")
     object LogIn : Screen("LogIn")
     object SignUp : Screen("SignUp")
+
+    object MakePrediction : Screen("Process")
+    object PredictView : Screen("PredictView")
 }
 
 sealed class BottomNavigationItems(val route: String, var icon: Int, var title: String){
