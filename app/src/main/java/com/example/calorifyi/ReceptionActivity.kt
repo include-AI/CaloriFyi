@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,7 +38,7 @@ import kotlinx.coroutines.withContext
 import java.sql.DriverManager
 
 //receiving objects
-data class Reception(val quantity: Int, val calories: Int, val proteins: Float, val fats: Float, val carbs: Float)
+data class Reception(val quantity: Int, val calories: Int, val proteins: Float, val fats: Float, val carbs: Float, val foodDesc: String)
 
 class ReceptionActivity: ComponentActivity() {
 
@@ -61,11 +62,14 @@ fun CalorieDisplay(modelOutput: String?, foodImage: Uri?) {
         mutableStateOf(emptyList<Reception>())
     }
     var context: Context
+    var isLoading by remember { mutableStateOf(false) }
 
     //async task
     LaunchedEffect(modelOutput) {
+        isLoading = true
         val newReception = recep(modelOutput)
         reception = newReception
+        isLoading = false
     }
     //displaying
     Column(
@@ -91,7 +95,8 @@ fun CalorieDisplay(modelOutput: String?, foodImage: Uri?) {
                         .size(250.dp)
                         .padding(top = 20.dp),
                 )
-                Text(text = "$modelOutput")
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = "$modelOutput", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(20.dp))
                 context = LocalContext.current
                 Button(
@@ -110,8 +115,13 @@ fun CalorieDisplay(modelOutput: String?, foodImage: Uri?) {
                 }
             }
         }
-//            DisplayReception(reception)
-        DisplayTable(reception)
+        if (isLoading) {
+            //display loading status
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+        } else {
+            //display table
+            DisplayTable(reception)
+        }
     }
 }
 
@@ -129,7 +139,7 @@ suspend fun recep(modelOutput: String?) = withContext(Dispatchers.IO) {
 
     // the query is only prepared not executed
     val query =
-        connection.prepareStatement("SELECT Quantity, Calories, Proteins, Fats, Carbs FROM test WHERE Name_of_Food = '$modelOutput'")
+        connection.prepareStatement("SELECT Quantity, Calories, Proteins, Fats, Carbs, Food_Desc FROM test WHERE Name_of_Food = '$modelOutput'")
     // the query is executed and results are fetched
     val result = query.executeQuery()
     // an empty list for holding the results
@@ -141,8 +151,8 @@ suspend fun recep(modelOutput: String?) = withContext(Dispatchers.IO) {
         val proteins = result.getFloat("Proteins")
         val fats = result.getFloat("Fats")
         val carbs = result.getFloat("Carbs")
-//            val foodDesc = result.getString("Food_Desc")
-        reception.add(Reception(quantity, calories, proteins, fats, carbs))
+        val foodDesc = result.getString("Food_Desc")
+        reception.add(Reception(quantity, calories, proteins, fats, carbs, foodDesc))
     }
     return@withContext reception
 }
@@ -183,6 +193,18 @@ fun DisplayTable(reception: List<Reception>){
                     )
                 }
             }
+        }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp)
+    ) {
+        reception.forEach { item ->
+            Text(text = "Food Description:", modifier = Modifier.padding(start = 16.dp))
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(text = "${item.foodDesc}", fontSize = 12.sp,fontFamily = googleSans, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
         }
     }
 }
